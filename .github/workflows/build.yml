@@ -71,7 +71,7 @@ jobs:
       id: download_pytorch
       run: |
         set -eux
-        curl -L https://github.com/pytorch/pytorch/releases/download/${{inputs.pytorch_ref}}/pytorch-${{inputs.pytorch_ref}}.tar.gz | tar -zx -
+        curl -L https://github.com/pytorch/pytorch/releases/download/${{inputs.pytorch_ref}}/pytorch-${{inputs.pytorch_ref}}.tar.gz | tar -zx
         echo "pytorch_dir=pytorch-${{inputs.pytorch_ref}}" >> $GITHUB_OUTPUT
 
     - name: Build
