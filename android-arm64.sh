@@ -6,10 +6,10 @@ cd $PYTORCH_DIR
 mkdir -p install
 
 # https://github.com/actions/runner-images/blob/e7648fd6a7ca5dc796f218a01ce92d0b8d068203/images/macos/macos-13-Readme.md
-EXPECTED_ANDROID_HOME="/Users/runner/Library/Android/sdk/ndk/26.3.11579264"
+EXPECTED_ANDROID_NDK="/Users/runner/Library/Android/sdk/ndk/26.3.11579264"
 
-if [ "$ANDROID_HOME" != "$EXPECTED_ANDROID_HOME" ]; then
-  echo "Unexpected android home: have: $ANDROID_HOME, want: $EXPECTED_ANDROID_HOME" >&2
+if [ "$ANDROID_NDK" != "$EXPECTED_ANDROID_NDK" ]; then
+  echo "Unexpected android home: have: $ANDROID_NDK, want: $EXPECTED_ANDROID_NDK" >&2
   exit 1
 fi
 
