@@ -5,7 +5,9 @@ set -eux
 cd $PYTORCH_DIR
 mkdir -p install
 
-conda install cmake ninja rust
+. ${CONDA}/Scripts/activate
+conda install -y cmake ninja rust
+# conda install cmake ninja rust
 pip install -r requirements.txt
 pip install mkl-static mkl-include
 

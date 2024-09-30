@@ -61,7 +61,7 @@ jobs:
 
         if [ "${{matrix.builder}}" = "windows-2022" ]; then
           # workaround for "filename too long error" on windows
-          curl -Lo pytorch.tgz https://github.com/pytorch/pytorch/releases/download/${{inputs.pytorch_ref}}/pytorch-${{inputs.pytorch_ref}}.tar.gz
+          curl -Lo pytorch.tar.gz https://github.com/pytorch/pytorch/releases/download/${{inputs.pytorch_ref}}/pytorch-${{inputs.pytorch_ref}}.tar.gz
           7z x pytorch.tar.gz
           7z x pytorch.tar
         else
