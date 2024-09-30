@@ -73,8 +73,8 @@ jobs:
     - name: Build
       id: build
       env:
-        PYTORCH_DIR="${{steps.download_pytorch.outputs.pytorch_dir}}"
-        ARCHIVE_FILE="libtorch-${{inputs.pytorch_ref}}-${{matrix.target}}.txz"
+        PYTORCH_DIR: ${{steps.download_pytorch.outputs.pytorch_dir}}
+        ARCHIVE_FILE: libtorch-${{inputs.pytorch_ref}}-${{matrix.target}}.txz
       run: |
         bash "${{matrix.target}}.sh"
         echo "artifact=$ARCHIVE_FILE" >> $GITHUB_OUTPUT
