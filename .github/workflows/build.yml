@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       pytorch_ref:
-        description: "pytorch ref (e.g. 'v2.4.1' or a commit SHA)"
+        description: pytorch ref (commit SHA or tag)
         required: true
         default: "v2.4.1"  # ee1b6804381c57161c477caa380a840a84167676
 
@@ -19,11 +19,11 @@ jobs:
           - builder: ubuntu-22.04
             target: linux-x64
 
-          - builder: macos-14
-            target: macos-arm64
-
           - builder: macos-13
             target: macos-x64
+
+          - builder: macos-14
+            target: macos-arm64
 
           - builder: macos-14
             target: ios-arm64

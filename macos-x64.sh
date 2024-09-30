@@ -1,3 +1,3 @@
 #!/bin/bash
 
-. ./macos_arm64.sh
+. ./macos-arm64.sh
