@@ -8,11 +8,9 @@ mkdir -p install
 pip install cmake ninja
 pip install -r requirements.txt
 
-scripts/build_local.sh \
-      -DCMAKE_INSTALL_PREFIX="build/install" \
-      -DBUILD_LITE_INTERPRETER=ON
+USE_CUDA=0 USE_DISTRIBUTED=0 BUILD_TEST=0 python setup.py develop
 
-cmake -P build/cmake_install.cmake
+cmake -D CMAKE_INSTALL_PREFIX=build/install -P build/cmake_install.cmake
 
 cd ..
 tar --create --xz --file "$ARCHIVE_FILE" -C pytorch/build/install .
