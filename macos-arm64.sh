@@ -15,4 +15,4 @@ scripts/build_local.sh \
 cmake -P build/cmake_install.cmake
 
 cd ..
-tar --create --xz --file "$ARCHIVE_FILE" -C pytorch/build/install .
+tar --create --xz --file "$ARCHIVE_FILE" -C $PYTORCH_DIR/build/install .

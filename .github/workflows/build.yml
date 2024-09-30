@@ -11,7 +11,7 @@ on:
 jobs:
   build:
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         include:
           # - platform: mac-intel
@@ -32,6 +32,19 @@ jobs:
 
           - builder: ubuntu-22.04
             target: ubuntu
+
+          # - platform: android-32
+          #   os: macos-14
+          #   preset: android-conan-ninja-release
+          #   conan_profile: android-32-ndk
+          #   conan_options: --conf tools.android:ndk_path=$ANDROID_NDK_ROOT
+          #   artifact_platform: armeabi-v7a
+          # - platform: android-64
+          #   os: macos-14
+          #   preset: android-conan-ninja-release
+          #   conan_profile: android-64-ndk
+          #   conan_options: --conf tools.android:ndk_path=$ANDROID_NDK_ROOT
+          #   artifact_platform: arm64-v8a
 
           # - platform: mingw
           #   os: ubuntu-22.04

@@ -11,4 +11,4 @@ pip install -r requirements.txt
 BUILD_LITE_INTERPRETER=1 scripts/build_ios.sh
 
 cd ..
-tar --create --xz --file "$ARCHIVE_FILE" -C pytorch/build_ios/install .
+tar --create --xz --file "$ARCHIVE_FILE" -C $PYTORCH_DIR/build_ios/install .
