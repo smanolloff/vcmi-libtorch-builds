@@ -1,21 +1,17 @@
 name: VCMI libtorch builds
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
   workflow_dispatch:
     inputs:
       pytorch_ref:
         description: "pytorch ref (e.g. 'v2.4.1' or a commit SHA)"
-        required: false
+        required: true
         default: "v2.4.1"  # ee1b6804381c57161c477caa380a840a84167676
 
 jobs:
   build:
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         include:
           # - platform: mac-intel
@@ -69,11 +65,10 @@ jobs:
 
     - name: Download pytorch
       id: download_pytorch
-      with:
-        run: |
-          set -eux
-          curl -L https://github.com/pytorch/pytorch/releases/download/${{inputs.pytorch_ref}}/pytorch-${{inputs.pytorch_ref}}.tar.gz | tar -zx -
-          echo "pytorch_dir=pytorch-${{inputs.pytorch_ref}}" >> $GITHUB_OUTPUT
+      run: |
+        set -eux
+        curl -L https://github.com/pytorch/pytorch/releases/download/${{inputs.pytorch_ref}}/pytorch-${{inputs.pytorch_ref}}.tar.gz | tar -zx -
+        echo "pytorch_dir=pytorch-${{inputs.pytorch_ref}}" >> $GITHUB_OUTPUT
 
     - name: Build
       id: build
