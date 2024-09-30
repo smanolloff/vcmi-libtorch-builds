@@ -1,0 +1,90 @@
+name: VCMI libtorch builds
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      pytorch_ref:
+        description: "pytorch ref (e.g. 'v2.4.1' or a commit SHA)"
+        required: false
+        default: "v2.4.1"  # ee1b6804381c57161c477caa380a840a84167676
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # - platform: mac-intel
+          #   os: macos-13
+          #   preset: macos-conan-ninja-release
+          #   conan_profile: macos-intel
+          #   conan_options: --options with_apple_system_libs=True
+          #   artifact_platform: intel
+
+          - builder: macos-14
+            target: macos-arm64
+
+          # - platform: ios
+          #   os: macos-13
+          #   preset: ios-release-conan-ccache
+          #   conan_profile: ios-arm64
+          #   conan_options: --options with_apple_system_libs=True
+          # - platform: mingw
+          #   os: ubuntu-22.04
+          #   preset: windows-mingw-conan-linux
+          #   conan_profile: mingw64-linux.jinja
+          # - platform: mingw-32
+          #   os: ubuntu-22.04
+          #   preset: windows-mingw-conan-linux
+          #   conan_profile: mingw32-linux.jinja
+          # - platform: android-32
+          #   os: macos-14
+          #   preset: android-conan-ninja-release
+          #   conan_profile: android-32-ndk
+          #   conan_options: --conf tools.android:ndk_path=$ANDROID_NDK_ROOT
+          #   artifact_platform: armeabi-v7a
+          # - platform: android-64
+          #   os: macos-14
+          #   preset: android-conan-ninja-release
+          #   conan_profile: android-64-ndk
+          #   conan_options: --conf tools.android:ndk_path=$ANDROID_NDK_ROOT
+          #   artifact_platform: arm64-v8a
+    runs-on: ${{ matrix.builder }}
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout (this)
+      uses: actions/checkout@v4
+
+    - name: Checkout (pytorch)
+      uses: actions/checkout@v4
+      with:
+        repository: pytorch/pytorch
+        submodules: recursive
+        path: pytorch
+        ref: "${{inputs.pytorch_ref}}"
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Build
+      run: bash '${{matrix.target}}.sh
+
+    - name: Create archive
+      run: "tar --create --xz --file 'libtorch-${{inputs.pytorch_ref}}-${{matrix.target}}.txz' -C pytorch/install ."
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      if-no-files-found: error
+      with:
+        name: "libtorch-${{inputs.pytorch_ref}}-${{matrix.target}}"
+        path: "libtorch-${{inputs.pytorch_ref}}-${{matrix.target}}.txz"
+        compression-level: 0
