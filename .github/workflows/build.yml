@@ -14,27 +14,29 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # - platform: mac-intel
-          #   os: macos-13
-          #   preset: macos-conan-ninja-release
-          #   conan_profile: macos-intel
-          #   conan_options: --options with_apple_system_libs=True
-          #   artifact_platform: intel
+          # macos-14 is Arm64, macos-13 is Intel
+          # See https://github.com/actions/runner-images/tree/740ab068bcf1d072e2b1db63af8b77f1539dbd39?tab=readme-ov-file#available-images
+          - builder: ubuntu-22.04
+            target: linux-x64
 
           - builder: macos-14
             target: macos-arm64
 
-          # - builder: macos-13
-          #   target: macos-intel
+          - builder: macos-13
+            target: macos-x64
 
           - builder: macos-14
             target: ios-arm64
 
-          - builder: ubuntu-22.04
-            target: ubuntu
+          - builder: macos-14
+            target: android-arm64
 
-          # - platform: android-32
-          #   os: macos-14
+          # XXX: armeabi-v7a libtorch build fails with assembler error:
+          #      invalid output constraint '=t' in asm
+          #      Identical TF issue: https://github.com/tensorflow/tensorflow/issues/59970
+          # - builder: macos-14
+          #   target: android-armeabi-v7a
+
           #   preset: android-conan-ninja-release
           #   conan_profile: android-32-ndk
           #   conan_options: --conf tools.android:ndk_path=$ANDROID_NDK_ROOT
@@ -93,7 +95,7 @@ jobs:
         PYTORCH_DIR: ${{steps.download_pytorch.outputs.pytorch_dir}}
         ARCHIVE_FILE: libtorch-${{inputs.pytorch_ref}}-${{matrix.target}}.txz
       run: |
-        bash "${{matrix.target}}.sh"
+        bash -x "${{matrix.target}}.sh"
         echo "artifact=$ARCHIVE_FILE" >> $GITHUB_OUTPUT
 
     - name: Upload artifact

@@ -5,30 +5,13 @@ set -eux
 cd $PYTORCH_DIR
 mkdir -p install
 
-# pip3 install 'conan<2.0'
-#
-# cat <<-EOF >conan-profile
-# [settings]
-# arch=armv8
-# build_type=Release
-# compiler=clang
-# compiler.libcxx=c++_shared
-# compiler.version=14
-# os=Android
-# os.api_level=21
-#
-# [tool_requires]
-# android-ndk/r26d
-# EOF
-#
-# conan profile update settings.arch=armv8 android
-# conan install android-ndk/r26d@ --profile:build ./conan-profile
-# export ANDROID_HOME=$(find ~/.conan/data/android-ndk/r26d/_/_/package -type d -maxdepth 1 | head -1)
-# [ -n "$ANDROID_HOME" ] || { echo "error: failed to find android NDK";  }
+# https://github.com/actions/runner-images/blob/e7648fd6a7ca5dc796f218a01ce92d0b8d068203/images/macos/macos-13-Readme.md
+EXPECTED_ANDROID_HOME="/Users/runner/Library/Android/sdk/ndk/26.3.11579264"
 
-curl -L https://dl.google.com/android/repository/android-ndk-r26d-linux.zip -o ndk.zip
-unzip ndk.zip
-export ANDROID_HOME=... # TODO
+if [ "$ANDROID_HOME" != "$EXPECTED_ANDROID_HOME" ]; then
+  echo "Unexpected android home: have: $ANDROID_HOME, want: $EXPECTED_ANDROID_HOME" >&2
+  exit 1
+fi
 
 rm -rf "android/pytorch_android/src/main/jniLibs"
 mkdir -p "android/pytorch_android/src/main/jniLibs"
@@ -43,7 +26,6 @@ export \
   INCLUDE_DIR="$PWD/android/pytorch_android/src/main/cpp/libtorch_include" \
   ANDROID_BUILD_ROOT="$PWD/build_android" \
   ANDROID_ABI=arm64-v8a \
-  ANDROID_NDK=$ANDROID_HOME \
   BUILD_ROOT="$PWD/build_android" \
   BUILD_LITE_INTERPRETER=1
 
