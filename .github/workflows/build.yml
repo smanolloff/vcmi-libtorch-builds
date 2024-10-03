@@ -17,22 +17,22 @@ jobs:
         # https://github.com/actions/runner-images/tree/740ab068bcf1d072e2b1db63af8b77f1539dbd39?tab=readme-ov-file#available-images
         include:
           - builder: windows-2022
-            target: windows-x64
+            target: win-x64
 
-          - builder: ubuntu-22.04
-            target: linux-x64
+          # - builder: ubuntu-22.04
+          #   target: linux-x64
 
-          - builder: macos-13
-            target: macos-x64
+          # - builder: macos-13
+          #   target: macos-x64
 
-          - builder: macos-14
-            target: macos-arm64
+          # - builder: macos-14
+          #   target: macos-arm64
 
-          - builder: macos-14
-            target: ios-arm64
+          # - builder: macos-14
+          #   target: ios-arm64
 
-          - builder: macos-14
-            target: android-arm64
+          # - builder: macos-14
+          #   target: android-arm64
 
           # XXX: armeabi-v7a libtorch build fails with assembler error:
           #      invalid output constraint '=t' in asm
@@ -76,7 +76,12 @@ jobs:
         PYTORCH_DIR: ${{steps.download_pytorch.outputs.pytorch_dir}}
         ARCHIVE_FILE: libtorch-${{inputs.pytorch_ref}}-${{matrix.target}}.txz
       run: |
-        bash -x "${{matrix.target}}.sh"
+        if [ "${{matrix.builder}}" = "windows-2022" ]; then
+          cd $PYTORCH_DIR
+          cmd.exe /c "${{matrix.target}}.bat"
+        else
+          bash -x "${{matrix.target}}.sh"
+        fi
         echo "artifact=$ARCHIVE_FILE" >> $GITHUB_OUTPUT
 
     - name: Upload artifact
