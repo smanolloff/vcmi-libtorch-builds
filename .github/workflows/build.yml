@@ -76,12 +76,7 @@ jobs:
         PYTORCH_DIR: ${{steps.download_pytorch.outputs.pytorch_dir}}
         ARCHIVE_FILE: libtorch-${{inputs.pytorch_ref}}-${{matrix.target}}.txz
       run: |
-        if [ "${{matrix.builder}}" = "windows-2022" ]; then
-          cd $PYTORCH_DIR
-          cmd.exe /c "${{matrix.target}}.bat"
-        else
-          bash -x "${{matrix.target}}.sh"
-        fi
+        bash -x "${{matrix.target}}.sh"
         echo "artifact=$ARCHIVE_FILE" >> $GITHUB_OUTPUT
 
     - name: Upload artifact
