@@ -49,7 +49,7 @@ cd "$PYTORCH_DIR"
 # The `python_sitelib_paths_fix.patch` fixes this.
 #
 
-"/c/Program Files/Git/usr/bin/patch" < ../patches/python_sitelib_paths_fix.patch
+"/c/Program Files/Git/usr/bin/patch" --binary < ../patches/python_sitelib_paths_fix.patch
 
 . "${CONDA}/Scripts/activate"
 conda create -y -n vcmi
