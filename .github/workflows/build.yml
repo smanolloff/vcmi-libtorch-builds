@@ -55,29 +55,19 @@ jobs:
         python-version: '3.10'
 
     - name: Download pytorch
-      id: download_pytorch
       run: |
         set -eux
-
-        if [ "${{matrix.builder}}" = "windows-2022" ]; then
-          # workaround for "filename too long error" on windows
-          curl -Lo pytorch.tar.gz https://github.com/pytorch/pytorch/releases/download/${{inputs.pytorch_ref}}/pytorch-${{inputs.pytorch_ref}}.tar.gz
-          7z x pytorch.tar.gz
-          7z x pytorch.tar
-        else
-          curl -L https://github.com/pytorch/pytorch/releases/download/${{inputs.pytorch_ref}}/pytorch-${{inputs.pytorch_ref}}.tar.gz | tar -zx
-        fi
-
-        echo "pytorch_dir=$PWD/pytorch-${{inputs.pytorch_ref}}" >> "$GITHUB_OUTPUT"
+        curl -LO https://github.com/pytorch/pytorch/releases/download/${{inputs.pytorch_ref}}/pytorch-${{inputs.pytorch_ref}}.tar.gz
 
     - name: Build
       id: build
       env:
-        PYTORCH_DIR: ${{steps.download_pytorch.outputs.pytorch_dir}}
-        ARCHIVE_FILE: libtorch-${{inputs.pytorch_ref}}-${{matrix.target}}.txz
+        INPUT_ARCHIVE_FILE: pytorch-${{inputs.pytorch_ref}}.tar.gz
+        OUTPUT_ARCHIVE_FILE: libtorch-${{inputs.pytorch_ref}}-${{matrix.target}}.txz
+        PYTORCH_REF: ${{inputs.pytorch_ref}}
       run: |
         bash -x "${{matrix.target}}.sh"
-        echo "artifact=$ARCHIVE_FILE" >> $GITHUB_OUTPUT
+        echo "artifact=$OUTPUT_ARCHIVE_FILE" >> $GITHUB_OUTPUT
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4

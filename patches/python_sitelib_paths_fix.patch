@@ -1,0 +1,18 @@
+diff --git a/caffe2/CMakeLists.txt b/caffe2/CMakeLists.txt
+index 89c31fab11..8c1789fcbd 100644
+--- a/caffe2/CMakeLists.txt
++++ b/caffe2/CMakeLists.txt
+@@ -1898,7 +1898,12 @@ endif()
+ 
+ if(BUILD_PYTHON)
+   # ---[ Options.
+-  set(PYTHON_LIB_REL_PATH "${Python_SITELIB}" CACHE STRING "Python installation path (relative to CMake installation prefix)")
++
++  # Fix invalid paths with backslashes for Windows
++  cmake_path(SET python_sitelib_cmake_path "${Python_SITELIB}")
++  message(STATUS "Convert '${Python_SITELIB}' -> '${python_sitelib_cmake_path}'")
++
++  set(PYTHON_LIB_REL_PATH "${python_sitelib_cmake_path}" CACHE STRING "Python installation path (relative to CMake installation prefix)")
+   message(STATUS "Using ${PYTHON_LIB_REL_PATH} as python relative installation path")
+ 
+ 

@@ -10,16 +10,56 @@
 
 set -eux
 
-cd $PYTORCH_DIR
-mkdir -p install
+if [ "$INPUT_ARCHIVE_FILE" != "${INPUT_ARCHIVE_FILE%.*}.tar.gz" ]; then
+  echo "Expected INPUT_ARCHIVE_FILE to end with .txz: $INPUT_ARCHIVE_FILE" >&2
+  exit 1
+fi
 
-. ${CONDA}/Scripts/activate
+if [ "$OUTPUT_ARCHIVE_FILE" != "${OUTPUT_ARCHIVE_FILE%.*}.txz" ]; then
+  echo "Expected OUTPUT_ARCHIVE_FILE to end with .txz: $OUTPUT_ARCHIVE_FILE" >&2
+  exit 1
+fi
+
+7z x "${INPUT_ARCHIVE_FILE}"
+7z x "${INPUT_ARCHIVE_FILE%.gz}"
+
+PYTORCH_DIR="pytorch-$PYTORCH_REF"
+
+if ! [ -d "$PYTORCH_DIR" ]; then
+  echo "Directory not found after unarchiving: $PYTORCH_DIR" >&2
+  exit 1
+fi
+
+cd "$PYTORCH_DIR"
+
+# Without BUILD_LIBTORCH_WHL, cmake_install.cmake will conatain windows paths
+# with backslashes. This is from the BUILD_PYTHON flag:
+# see caffe2/CMakeLists.txt (near EOF):
+#
+# setup.py only has BUILD_LIBTORCH_WHL flag which sets BUILD_PYTHON=0
+#
+# cmake -D CMAKE_INSTALL_PREFIX=build/install -P build/cmake_install.cmake
+#
+# That works OK on mac, but of course on windows fails with:
+#
+#     running build_ext
+#     -- Building with NumPy bindings
+#     error: can't copy 'build/temp.win-amd64-cpython-312/Release/torch/csrc/_C.cp312-win_amd64.lib': doesn't exist or not a regular file
+#
+# The `python_sitelib_paths_fix.patch` fixes this.
+#
+
+"/c/Program Files/Git/usr/bin/patch" < ../vcmi-libtorch-builds/patches/python_sitelib_paths_fix.patch
+
+. "${CONDA}/Scripts/activate"
+conda create -y -n vcmi
+conda activate vcmi
 conda install -y cmake ninja rust
 pip install -r requirements.txt
 pip install mkl-static mkl-include
 
 export \
-  BUILD_LIBTORCH_WHL=1 \
+  # BUILD_LIBTORCH_WHL=1 \
   # BUILD_LITE_INTERPRETER=1 \
   BUILD_TEST=0 \
   USE_CUDA=0
@@ -38,11 +78,6 @@ cmake -D CMAKE_INSTALL_PREFIX=install -P build/cmake_install.cmake
 
 cd ..
 
-if [ "$ARCHIVE_FILE" != "${ARCHIVE_FILE%.*}.txz" ]; then
-  echo "Expected ARCHIVE_FILE to end with .txz: $ARCHIVE_FILE" >&2
-  exit 1
-fi
-
-TAR_FILE="${ARCHIVE_FILE%.*}.tar"
+TAR_FILE="${OUTPUT_ARCHIVE_FILE%.*}.tar"
 7z a -ttar "${TAR_FILE}" "libtorch/*"
-7z a -txz "$ARCHIVE_FILE" "${TAR_FILE}"
+7z a -txz "$OUTPUT_ARCHIVE_FILE" "${TAR_FILE}"
