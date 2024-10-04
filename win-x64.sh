@@ -52,8 +52,8 @@ cd "$PYTORCH_DIR"
 "/c/Program Files/Git/usr/bin/patch" -d caffe2 < ../patches/python_sitelib_paths_fix.patch
 
 . "${CONDA}/Scripts/activate"
-conda create -y -n vcmi
-conda activate vcmi
+# conda create -y -n vcmi
+# conda activate vcmi
 conda install -y cmake ninja rust
 pip install -r requirements.txt
 pip install mkl-static mkl-include
