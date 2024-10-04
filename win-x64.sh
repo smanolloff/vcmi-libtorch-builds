@@ -49,7 +49,7 @@ cd "$PYTORCH_DIR"
 # The `python_sitelib_paths_fix.patch` fixes this.
 #
 
-"/c/Program Files/Git/usr/bin/patch" < ../vcmi-libtorch-builds/patches/python_sitelib_paths_fix.patch
+"/c/Program Files/Git/usr/bin/patch" < ../patches/python_sitelib_paths_fix.patch
 
 . "${CONDA}/Scripts/activate"
 conda create -y -n vcmi
@@ -57,6 +57,9 @@ conda activate vcmi
 conda install -y cmake ninja rust
 pip install -r requirements.txt
 pip install mkl-static mkl-include
+
+# XXX:
+# BUILD_LITE_INTERPRETER seems to lead to many "unresolved external symbol" errors
 
 export \
   # BUILD_LIBTORCH_WHL=1 \
@@ -74,10 +77,10 @@ export \
   # USE_MKLDNN=0
 
 python setup.py develop
-cmake -D CMAKE_INSTALL_PREFIX=install -P build/cmake_install.cmake
-
-cd ..
+cmake -D CMAKE_INSTALL_PREFIX=libtorch -P build/cmake_install.cmake
 
 TAR_FILE="${OUTPUT_ARCHIVE_FILE%.*}.tar"
 7z a -ttar "${TAR_FILE}" "libtorch/*"
 7z a -txz "$OUTPUT_ARCHIVE_FILE" "${TAR_FILE}"
+mv "$OUTPUT_ARCHIVE_FILE" ..
+
