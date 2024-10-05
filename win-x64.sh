@@ -69,9 +69,14 @@ pip install mkl-static mkl-include
 # XXX:
 # BUILD_LITE_INTERPRETER seems to lead to many "unresolved external symbol" errors
 
+# WORKS
+# export \
+#   BUILD_TEST=0 \
+#   USE_CUDA=0
+
 export \
   # BUILD_LIBTORCH_WHL=1 \
-  # BUILD_LITE_INTERPRETER=1 \
+  BUILD_LITE_INTERPRETER=1 \
   BUILD_TEST=0 \
   USE_CUDA=0
   # USE_CUDNN=0 \
