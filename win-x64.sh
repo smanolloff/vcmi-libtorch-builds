@@ -32,23 +32,8 @@ fi
 
 cd "$PYTORCH_DIR"
 
-# Without BUILD_LIBTORCH_WHL, cmake_install.cmake will conatain windows paths
-# with backslashes. This is from the BUILD_PYTHON flag:
-# see caffe2/CMakeLists.txt (near EOF):
-#
-# setup.py only has BUILD_LIBTORCH_WHL flag which sets BUILD_PYTHON=0
-#
-# cmake -D CMAKE_INSTALL_PREFIX=build/install -P build/cmake_install.cmake
-#
-# That works OK on mac, but of course on windows fails with:
-#
-#     running build_ext
-#     -- Building with NumPy bindings
-#     error: can't copy 'build/temp.win-amd64-cpython-312/Release/torch/csrc/_C.cp312-win_amd64.lib': doesn't exist or not a regular file
-#
+# Without BUILD_LIBTORCH_WHL, cmake_install.cmake will invalid paths on windows
 # The `python_sitelib_paths_fix.patch` fixes this.
-#
-
 "/c/Program Files/Git/usr/bin/patch" -d caffe2 < ../patches/python_sitelib_paths_fix.patch
 
 . "${CONDA}/Scripts/activate"
@@ -70,17 +55,16 @@ pip install mkl-static mkl-include
 # BUILD_LITE_INTERPRETER seems to lead to many "unresolved external symbol" errors
 
 export \
-  # BUILD_LIBTORCH_WHL=1 \
-  BUILD_LITE_INTERPRETER=1 \
-  BUILD_TEST=0 \
   USE_CUDA=0 \
-  USE_CUDNN=0 \
-  USE_CUSPARSELT=0 \
-  USE_DISTRIBUTED=0 \
-  USE_GLOO=0 \
-  USE_KINETO=0 \
-  USE_TENSORPIPE=0 \
-  USE_LITE_INTERPRETER_PROFILER=0
+  BUILD_TEST=0
+  # BUILD_LITE_INTERPRETER=1 \
+  # USE_CUDNN=0 \
+  # USE_CUSPARSELT=0 \
+  # USE_DISTRIBUTED=0 \
+  # USE_GLOO=0 \
+  # USE_KINETO=0 \
+  # USE_TENSORPIPE=0 \
+  # USE_LITE_INTERPRETER_PROFILER=0 \
   # USE_MPI=0 \
   # USE_MKLDNN=0
 
