@@ -52,8 +52,16 @@ cd "$PYTORCH_DIR"
 "/c/Program Files/Git/usr/bin/patch" -d caffe2 < ../patches/python_sitelib_paths_fix.patch
 
 . "${CONDA}/Scripts/activate"
+
+
+# XXX: conda create+activate causes this error???
+#  File "D:\a\vcmi-libtorch-builds\vcmi-libtorch-builds\pytorch-v2.4.1\tools\build_pytorch_libs.py", line 37, in _overlay_windows_vcvars
+#    vc_env: Dict[str, str] = distutils._msvccompiler._get_vc_env(vc_arch)
+
 # conda create -y -n vcmi
 # conda activate vcmi
+
+
 conda install -y cmake ninja rust
 pip install -r requirements.txt
 pip install mkl-static mkl-include
