@@ -16,9 +16,7 @@ fi
 pip install cmake ninja
 pip install -r requirements.txt
 
-rm -rf "android/pytorch_android/src/main/jniLibs"
 mkdir -p "android/pytorch_android/src/main/jniLibs"
-rm -rf "android/pytorch_android/src/main/cpp/libtorch_include"
 mkdir -p "android/pytorch_android/src/main/cpp/libtorch_include"
 
 export \

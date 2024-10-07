@@ -19,26 +19,26 @@ jobs:
           - builder: windows-2022
             target: win-x64
 
-          # - builder: ubuntu-22.04
-          #   target: linux-x64
+          - builder: ubuntu-22.04
+            target: linux-x64
 
-          # - builder: macos-13
-          #   target: macos-x64
+          - builder: macos-13
+            target: macos-x64
 
-          # - builder: macos-14
-          #   target: macos-arm64
+          - builder: macos-14
+            target: macos-arm64
 
-          # - builder: macos-14
-          #   target: ios-arm64
+          - builder: macos-14
+            target: ios-arm64
 
-          # - builder: macos-14
-          #   target: android-arm64
+          - builder: macos-14
+            target: android-arm64
 
-          # XXX: armeabi-v7a libtorch build fails with assembler error:
-          #      invalid output constraint '=t' in asm
-          #      Identical TF issue: https://github.com/tensorflow/tensorflow/issues/59970
-          # - builder: macos-14
-          #   target: android-armeabi-v7a
+          # 32-bit android (armeabi-v7a) builds fail with assembler error
+          # (same issue as https://github.com/tensorflow/tensorflow/issues/59970)
+          #
+          # mingw builds are not supported
+          # (see https://stackoverflow.com/a/76160277)
 
     runs-on: ${{ matrix.builder }}
     defaults:

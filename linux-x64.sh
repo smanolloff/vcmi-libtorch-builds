@@ -3,8 +3,6 @@
 set -eux
 
 cd $PYTORCH_DIR
-mkdir -p install
-
 pip install cmake ninja
 pip install -r requirements.txt
 pip install mkl-static mkl-include

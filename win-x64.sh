@@ -32,15 +32,12 @@ fi
 
 cd "$PYTORCH_DIR"
 
-# Without BUILD_LIBTORCH_WHL, cmake_install.cmake will invalid paths on windows
-# The `python_sitelib_paths_fix.patch` fixes this.
+# XXX: cmake_install.cmake is generated with paths on windows => apply patch
 "/c/Program Files/Git/usr/bin/patch" -d caffe2 < ../patches/python_sitelib_paths_fix.patch
 
 . "${CONDA}/Scripts/activate"
 
-# XXX: conda create+activate causes this error:
-#  File "D:\a\vcmi-libtorch-builds\vcmi-libtorch-builds\pytorch-v2.4.1\tools\build_pytorch_libs.py", line 37, in _overlay_windows_vcvars
-#    vc_env: Dict[str, str] = distutils._msvccompiler._get_vc_env(vc_arch)
+# XXX: conda create+activate causes distutils errors during install => skip
 # conda create -y -n vcmi
 # conda activate vcmi
 
@@ -48,21 +45,17 @@ conda install -y cmake ninja rust
 pip install -r requirements.txt
 pip install mkl-static mkl-include
 
-# WORKS
-# export BUILD_TEST=0 USE_CUDA=0
-
-# XXX:
-# BUILD_LITE_INTERPRETER seems to lead to many "unresolved external symbol" errors
+# XXX: BUILD_LITE_INTERPRETER=1 causes "unresolved external symbol" errors
 
 export \
-  USE_CUDA=0 \
   BUILD_TEST=0 \
-  USE_LITE_INTERPRETER_PROFILER=0 \
+  USE_CUDA=0 \
   USE_CUDNN=0 \
   USE_CUSPARSELT=0 \
   USE_DISTRIBUTED=0 \
   USE_GLOO=0 \
   USE_KINETO=0 \
+  USE_LITE_INTERPRETER_PROFILER=0 \
   USE_TENSORPIPE=0 \
   USE_MPI=0 \
   USE_MKLDNN=0
