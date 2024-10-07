@@ -22,15 +22,7 @@ fi
 
 7z x "${INPUT_ARCHIVE_FILE}"
 7z x "${INPUT_ARCHIVE_FILE%.gz}"
-
-PYTORCH_DIR="pytorch-$PYTORCH_REF"
-
-if ! [ -d "$PYTORCH_DIR" ]; then
-  echo "Directory not found after unarchiving: $PYTORCH_DIR" >&2
-  exit 1
-fi
-
-cd "$PYTORCH_DIR"
+cd "pytorch-$PYTORCH_REF"
 
 # XXX: cmake_install.cmake is generated with paths on windows => apply patch
 "/c/Program Files/Git/usr/bin/patch" -d caffe2 < ../patches/python_sitelib_paths_fix.patch
@@ -64,7 +56,7 @@ python setup.py develop
 cmake -D CMAKE_INSTALL_PREFIX=libtorch -P build/cmake_install.cmake
 
 TAR_FILE="${OUTPUT_ARCHIVE_FILE%.*}.tar"
-7z a -ttar "${TAR_FILE}" "libtorch/*"
+7z a -ttar "${TAR_FILE}" "libtorch"
 7z a -txz "$OUTPUT_ARCHIVE_FILE" "${TAR_FILE}"
 mv "$OUTPUT_ARCHIVE_FILE" ..
 

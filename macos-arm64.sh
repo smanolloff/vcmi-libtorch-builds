@@ -2,7 +2,8 @@
 
 set -eux
 
-cd $PYTORCH_DIR
+tar -zxf $INPUT_ARCHIVE_FILE
+cd "pytorch-$PYTORCH_REF"
 pip install cmake ninja
 pip install -r requirements.txt
 
@@ -19,7 +20,6 @@ export \
   USE_TENSORPIPE=0
 
 python setup.py develop
-cmake -D CMAKE_INSTALL_PREFIX=install -P build/cmake_install.cmake
+cmake -D CMAKE_INSTALL_PREFIX=install/libtorch -P build/cmake_install.cmake
 
-cd ..
-tar --create --xz --file "$ARCHIVE_FILE" -C $PYTORCH_DIR/install .
+tar --create --xz --file "../$OUTPUT_ARCHIVE_FILE" -C install libtorch

@@ -2,9 +2,6 @@
 
 set -eux
 
-cd $PYTORCH_DIR
-mkdir -p install
-
 # https://github.com/actions/runner-images/blob/e7648fd6a7ca5dc796f218a01ce92d0b8d068203/images/macos/macos-13-Readme.md
 EXPECTED_ANDROID_NDK="/Users/runner/Library/Android/sdk/ndk/26.3.11579264"
 
@@ -13,6 +10,8 @@ if [ "$ANDROID_NDK" != "$EXPECTED_ANDROID_NDK" ]; then
   exit 1
 fi
 
+tar -zxf $INPUT_ARCHIVE_FILE
+cd "pytorch-$PYTORCH_REF"
 pip install cmake ninja
 pip install -r requirements.txt
 
@@ -20,7 +19,6 @@ mkdir -p "android/pytorch_android/src/main/jniLibs"
 mkdir -p "android/pytorch_android/src/main/cpp/libtorch_include"
 
 export \
-  PYTORCH_DIR="$PWD" \
   PYTORCH_ANDROID_DIR="$PWD/android" \
   GRADLE_PATH="$PWD/android/gradlew" \
   LIB_DIR="$PWD/android/pytorch_android/src/main/jniLibs" \
@@ -32,5 +30,5 @@ export \
 
 scripts/build_android.sh -DUSE_LITE_INTERPRETER_PROFILER=OFF -DUSE_VULKAN=OFF
 
-cd ..
-tar --create --xz --file "$ARCHIVE_FILE" -C $PYTORCH_DIR/build_android/install .
+mv build_android/{install,libtorch}
+tar --create --xz --file "../$OUTPUT_ARCHIVE_FILE" -C build_android libtorch
