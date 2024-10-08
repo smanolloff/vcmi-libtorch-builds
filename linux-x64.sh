@@ -6,7 +6,9 @@ tar -zxf $INPUT_ARCHIVE_FILE
 cd "pytorch-$PYTORCH_REF"
 pip install cmake ninja
 pip install -r requirements.txt
-pip install mkl-static mkl-include
+
+# MKL is intel-specific
+# pip install mkl-static mkl-include
 
 # build_local *may* be used for linux builds
 # (and seems to produce smaller binaries compared to setup.py)

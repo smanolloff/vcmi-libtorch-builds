@@ -35,7 +35,9 @@ cd "pytorch-$PYTORCH_REF"
 
 conda install -y cmake ninja rust
 pip install -r requirements.txt
-pip install mkl-static mkl-include
+
+# MKL is intel-specific
+# pip install mkl-static mkl-include
 
 # build_local *must not* be used for windows builds
 
@@ -44,7 +46,7 @@ pip install mkl-static mkl-include
 export BUILD_TEST=0
 export USE_CUDA=0
 export USE_DISTRIBUTED=0
-export USE_FBGEMM=0  # depends on openmp
+export USE_FBGEMM=0  # depends on openmp; also causes asmjit build
 export USE_KINETO=0
 export USE_MPI=0
 export USE_MKL=0  # MKL is intel-specific
