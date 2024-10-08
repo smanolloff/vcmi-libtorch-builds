@@ -1,1 +1,3 @@
-GITHUB_TOKEN=(cat .github_token) ~/Downloads/github-release-darwin-amd64-github-release upload --user smanolloff --repo vcmi-libtorch-builds --tag v0.0.0-test --name "vcmi-libtorch-ios-arm64.txz" --file artifacts/libtorch-v2.4.1-ios-arm64.txz
+# Libtorch builds for VCMI
+
+This repository contains prebuilt torch libraries for VCMI's ML-powered "MMAI".
