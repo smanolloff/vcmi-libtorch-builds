@@ -47,10 +47,11 @@ export \
   USE_DISTRIBUTED=0 \
   USE_GLOO=0 \
   USE_KINETO=0 \
-  USE_LITE_INTERPRETER_PROFILER=0 \
   USE_TENSORPIPE=0 \
   USE_MPI=0 \
-  USE_MKLDNN=0
+  USE_MKLDNN=0 \
+  USE_OPENMP=0 \
+  USE_NUMPY=0
 
 python setup.py develop
 cmake -D CMAKE_INSTALL_PREFIX=libtorch -P build/cmake_install.cmake

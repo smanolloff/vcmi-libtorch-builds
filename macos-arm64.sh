@@ -2,24 +2,26 @@
 
 set -eux
 
-tar -zxf $INPUT_ARCHIVE_FILE
-cd "pytorch-$PYTORCH_REF"
+cd $PYTORCH_DIR
+mkdir -p install
+
 pip install cmake ninja
 pip install -r requirements.txt
 
-export \
-  BUILD_LIBTORCH_WHL=1 \
-  BUILD_TEST=0 \
-  USE_CUDA=0 \
-  USE_CUDNN=0 \
-  USE_CUSPARSELT=0 \
-  USE_DISTRIBUTED=0 \
-  USE_GLOO=0 \
-  USE_KINETO=0 \
-  USE_LITE_INTERPRETER_PROFILER=0 \
-  USE_TENSORPIPE=0
+# python setup.py produces larger libs (even with all features turned off)
+# => use build_local.sh
+# XXX: the -DCMAKE_INSTALL_PREFIX *must* be specified the during build phase
 
-python setup.py develop
-cmake -D CMAKE_INSTALL_PREFIX=install/libtorch -P build/cmake_install.cmake
+BUILD_ROOT=build_mac scripts/build_local.sh \
+  -DCMAKE_INSTALL_PREFIX="libtorch" \
+  -DBUILD_LITE_INTERPRETER=1 \
+  -DBUILD_PYTHON=0 \
+  -DBUILD_TEST=0 \
+  -DUSE_CUDA=0 \
+  -DUSE_DISTRIBUTED=0 \
+  -DUSE_LITE_INTERPRETER_PROFILER=0 \
+  -DUSE_KINETO=0
 
-tar --create --xz --file "../$OUTPUT_ARCHIVE_FILE" -C install libtorch
+cmake -P build_mac/cmake_install.cmake
+
+tar --create --xz --file "../$OUTPUT_ARCHIVE_FILE" -C build_mac libtorch

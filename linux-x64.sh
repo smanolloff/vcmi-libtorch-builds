@@ -8,20 +8,18 @@ pip install cmake ninja
 pip install -r requirements.txt
 pip install mkl-static mkl-include
 
-export \
-  BUILD_LIBTORCH_WHL=1 \
-  BUILD_TEST=0 \
-  USE_CUDA=0 \
-  USE_CUDNN=0 \
-  USE_CUSPARSELT=0 \
-  USE_DISTRIBUTED=0 \
-  USE_GLOO=0 \
-  USE_KINETO=0 \
-  USE_LITE_INTERPRETER_PROFILER=0 \
-  USE_TENSORPIPE=0 \
-  _GLIBCXX_USE_CXX11_ABI=1
+BUILD_ROOT=build_linux scripts/build_local.sh \
+  -DCMAKE_INSTALL_PREFIX="libtorch" \
+  -D_GLIBCXX_USE_CXX11_ABI=1 \
+  -DBUILD_PYTHON=0 \
+  -DBUILD_TEST=0 \
+  -DUSE_CUDA=0 \
+  -DUSE_DISTRIBUTED=0 \
+  -DUSE_KINETO=0 \
+  -DUSE_MKLDNN=0 \
+  -DUSE_NUMPY=0 \
+  -DUSE_OPENMP=0
 
-python setup.py develop
-cmake -D CMAKE_INSTALL_PREFIX=install/libtorch -P build/cmake_install.cmake
+cmake -P build_linux/cmake_install.cmake
 
-tar --create --xz --file "../$OUTPUT_ARCHIVE_FILE" -C install libtorch
+tar --create --xz --file "../$OUTPUT_ARCHIVE_FILE" -C build_linux libtorch
