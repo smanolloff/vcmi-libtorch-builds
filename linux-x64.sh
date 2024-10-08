@@ -20,6 +20,7 @@ args=(
   -DUSE_CUDA=0  # no gpu needed
   -DUSE_DISTRIBUTED=0
   -DUSE_KINETO=0
+  -DUSE_MKL=0  # MKL is intel-specific
   -DUSE_MKLDNN=0  # MKL is intel-specific
   -DUSE_NUMPY=0  # has libgfortran dependency
   -DUSE_OPENMP=0  # openmp slows down inference

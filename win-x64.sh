@@ -44,9 +44,11 @@ pip install mkl-static mkl-include
 export BUILD_TEST=0
 export USE_CUDA=0
 export USE_DISTRIBUTED=0
+export USE_FBGEMM=0  # depends on openmp
 export USE_KINETO=0
 export USE_MPI=0
-export USE_MKLDNN=0  # MKL is intel-specific
+export USE_MKL=0  # MKL is intel-specific
+export USE_MKLDNN=0
 export USE_NUMPY=0
 export USE_OPENMP=0  # openmp slows down inference
 
