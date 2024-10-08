@@ -16,7 +16,7 @@ pip install -r requirements.txt
 args=(
   -DCMAKE_INSTALL_PREFIX=libtorch  # must be available during build
   -D_GLIBCXX_USE_CXX11_ABI=1
-  -DBUILD_LITE_INTERPRETER=0  # causes errors if built (undefined symbols)
+  -DBUILD_LITE_INTERPRETER=0  # causes errors (undefined symbols)
   -DBUILD_PYTHON=0
   -DBUILD_TEST=0
   -DUSE_CUDA=0  # no gpu needed
