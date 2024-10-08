@@ -37,21 +37,18 @@ conda install -y cmake ninja rust
 pip install -r requirements.txt
 pip install mkl-static mkl-include
 
+# build_local *must not* be used for windows builds
+
 # XXX: BUILD_LITE_INTERPRETER=1 causes "unresolved external symbol" errors
 
-export \
-  BUILD_TEST=0 \
-  USE_CUDA=0 \
-  USE_CUDNN=0 \
-  USE_CUSPARSELT=0 \
-  USE_DISTRIBUTED=0 \
-  USE_GLOO=0 \
-  USE_KINETO=0 \
-  USE_TENSORPIPE=0 \
-  USE_MPI=0 \
-  USE_MKLDNN=0 \
-  USE_OPENMP=0 \
-  USE_NUMPY=0
+export BUILD_TEST=0
+export USE_CUDA=0
+export USE_DISTRIBUTED=0
+export USE_KINETO=0
+export USE_MPI=0
+export USE_MKLDNN=0  # MKL is intel-specific
+export USE_NUMPY=0
+export USE_OPENMP=0  # openmp slows down inference
 
 python setup.py develop
 cmake -D CMAKE_INSTALL_PREFIX=libtorch -P build/cmake_install.cmake

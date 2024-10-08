@@ -15,6 +15,8 @@ cd "pytorch-$PYTORCH_REF"
 pip install cmake ninja
 pip install -r requirements.txt
 
+# build_android.sh *must* be used for android builds
+
 mkdir -p "android/pytorch_android/src/main/jniLibs"
 mkdir -p "android/pytorch_android/src/main/cpp/libtorch_include"
 
