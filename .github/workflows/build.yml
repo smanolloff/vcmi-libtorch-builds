@@ -6,7 +6,7 @@ on:
       pytorch_ref:
         description: pytorch ref (commit SHA or tag)
         required: true
-        default: "v2.4.1"  # ee1b6804381c57161c477caa380a840a84167676
+        default: "v2.8.0"  # ba56102387ef21a3b04b357e5b183d48f0afefc7
 
 jobs:
   build:
@@ -47,12 +47,12 @@ jobs:
 
     steps:
     - name: Checkout (this)
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: '3.12'
 
     - name: Download pytorch
       run: |
