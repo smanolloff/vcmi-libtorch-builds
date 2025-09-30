@@ -24,7 +24,7 @@ fi
 7z x "${INPUT_ARCHIVE_FILE%.gz}" || :  # ignore symlink errors
 cd "pytorch-$PYTORCH_REF"
 
-pip -m venv .venv
+python -m venv .venv
 . .venv/Scripts/activate
 
 # XXX: cmake_install.cmake is generated with paths on windows => apply patch
