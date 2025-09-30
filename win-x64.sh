@@ -20,22 +20,25 @@ if [ "$OUTPUT_ARCHIVE_FILE" != "${OUTPUT_ARCHIVE_FILE%.txz}.txz" ]; then
   exit 1
 fi
 
-tar -zxf "${INPUT_ARCHIVE_FILE}"
+7z x "${INPUT_ARCHIVE_FILE}"
+7z x "${INPUT_ARCHIVE_FILE%.gz}" || :  # ignore symlink errors
 cd "pytorch-$PYTORCH_REF"
-python -m venv .venv
+
+pip -m venv .venv
 . .venv/Scripts/activate
 
 # XXX: cmake_install.cmake is generated with paths on windows => apply patch
 # "/c/Program Files/Git/usr/bin/patch" -d caffe2 < ../patches/python_sitelib_paths_fix.patch
 
-# . "${CONDA}/Scripts/activate"
-
-# XXX: conda create+activate causes distutils errors during install => skip
-# conda create -y -n vcmi
-# conda activate vcmi
-
-conda install -y cmake ninja rust
+pip install cmake ninja
 pip install -r requirements.txt
+
+# MKL is intel-specific
+# pip install mkl-static mkl-include
+
+# build_local *must not* be used for windows builds
+
+# XXX: BUILD_LITE_INTERPRETER=1 causes "unresolved external symbol" errors
 
 export BUILD_TEST=0
 export USE_CUDA=0

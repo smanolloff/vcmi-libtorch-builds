@@ -54,6 +54,10 @@ jobs:
       with:
         python-version: '3.12'
 
+    - name: Setup Rust toolchain
+      if: ${{ matrix.target == 'win-x64' }}
+      uses: dtolnay/rust-toolchain@stable
+
     - name: Download pytorch
       run: |
         set -eux
