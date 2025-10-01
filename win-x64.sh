@@ -10,19 +10,20 @@
 
 set -eux
 
-if [ "$INPUT_ARCHIVE_FILE" != "${INPUT_ARCHIVE_FILE%.tar.gz}.tar.gz" ]; then
-  echo "Expected INPUT_ARCHIVE_FILE to end with .tar.gz: $INPUT_ARCHIVE_FILE" >&2
-  exit 1
-fi
+#if [ "$INPUT_ARCHIVE_FILE" != "${INPUT_ARCHIVE_FILE%.tar.gz}.tar.gz" ]; then
+#  echo "Expected INPUT_ARCHIVE_FILE to end with .tar.gz: $INPUT_ARCHIVE_FILE" >&2
+#  exit 1
+#fi
 
 if [ "$OUTPUT_ARCHIVE_FILE" != "${OUTPUT_ARCHIVE_FILE%.txz}.txz" ]; then
   echo "Expected OUTPUT_ARCHIVE_FILE to end with .txz: $OUTPUT_ARCHIVE_FILE" >&2
   exit 1
 fi
 
-7z x "${INPUT_ARCHIVE_FILE}"
-7z x "${INPUT_ARCHIVE_FILE%.gz}" || :  # ignore symlink errors
-cd "pytorch-$PYTORCH_REF"
+#7z x "${INPUT_ARCHIVE_FILE}"
+#7z x "${INPUT_ARCHIVE_FILE%.gz}" || :  # ignore symlink errors
+#cd "pytorch-$PYTORCH_REF"
+cd pytorch
 
 python -m venv .venv
 . .venv/Scripts/activate
