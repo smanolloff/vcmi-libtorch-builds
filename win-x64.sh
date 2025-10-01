@@ -31,6 +31,9 @@ python -m venv .venv
 # XXX: cmake_install.cmake is generated with paths on windows => apply patch
 # "/c/Program Files/Git/usr/bin/patch" -d caffe2 < ../patches/python_sitelib_paths_fix.patch
 
+# XXX: fix bug with nccl being downloaded even though it is not used
+sed -i 's/^    checkout_nccl/    #checkout_nccl/' tools/build_pytorch_libs.py
+
 pip install cmake ninja
 pip install -r requirements.txt
 

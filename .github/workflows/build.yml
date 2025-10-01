@@ -24,20 +24,20 @@ jobs:
           - builder: windows-2025
             target: win-x64
 
-          # - builder: ubuntu-latest
-          #   target: linux-x64
+          #- builder: ubuntu-latest
+          #  target: linux-x64
 
-          # - builder: macos-14
-          #   target: macos-x64
+          #- builder: macos-14
+          #  target: macos-x64
 
-          # - builder: macos-14
-          #   target: macos-arm64
+          #- builder: macos-14
+          #  target: macos-arm64
 
-          # - builder: macos-14
-          #   target: ios-arm64
+          #- builder: macos-14
+          #  target: ios-arm64
 
-          # - builder: macos-14
-          #   target: android-arm64
+          #- builder: macos-14
+          #  target: android-arm64
 
           # 32-bit android (armeabi-v7a) builds fail with assembler error
           # (same issue as https://github.com/tensorflow/tensorflow/issues/59970)
@@ -57,11 +57,11 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.12'
+        python-version: '3.13'
 
-    - name: Setup Rust toolchain
-      if: ${{ matrix.target == 'win-x64' }}
-      uses: dtolnay/rust-toolchain@stable
+    #- name: Setup Rust toolchain
+    #  if: ${{ matrix.target == 'win-x64' }}
+    #  uses: dtolnay/rust-toolchain@stable
 
     #- name: Download pytorch
     #  run: |
