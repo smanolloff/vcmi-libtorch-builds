@@ -31,9 +31,6 @@ python -m venv .venv
 # XXX: cmake_install.cmake is generated with paths on windows => apply patch
 # "/c/Program Files/Git/usr/bin/patch" -d caffe2 < ../patches/python_sitelib_paths_fix.patch
 
-# XXX: fix bug with nccl being downloaded even though it is not used
-sed -i 's/^    checkout_nccl/    #checkout_nccl/' tools/build_pytorch_libs.py
-
 pip install cmake ninja
 pip install -r requirements.txt
 
@@ -43,6 +40,7 @@ pip install -r requirements.txt
 # build_local *must not* be used for windows builds
 
 # XXX: BUILD_LITE_INTERPRETER=1 causes "unresolved external symbol" errors
+export BUILD_LITE_INTERPRETER=1
 
 export BUILD_TEST=0
 export USE_CUDA=0
