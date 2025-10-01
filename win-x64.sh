@@ -43,6 +43,7 @@ pip install -r requirements.txt
 export BUILD_TEST=0
 export USE_CUDA=0
 export USE_DISTRIBUTED=1    # bug
+export INTERN_DISABLE_ONNX=1
 export USE_GLOO=1
 export USE_FBGEMM=0  # depends on openmp; also causes asmjit build
 export USE_KINETO=0
