@@ -11,7 +11,7 @@ on:
         required: true
         default: "v2.8.0"  # ba56102387ef21a3b04b357e5b183d48f0afefc7
 env:
-  PYTORCH_REF: ${{ github.event.inputs.pytorch_ref || 'v2.8.0' }}  # on push -> 'release', on dispatch -> user input
+  PYTORCH_REF: ${{ inputs.pytorch_ref || 'v2.8.0' }}
 
 jobs:
   build:
@@ -76,7 +76,7 @@ jobs:
       with:
         submodules: recursive
         repository: pytorch/pytorch
-        ref: v2.8.0
+        ref: "${{ inputs.pytorch_ref }}"
         path: pytorch
 
     - name: Build
