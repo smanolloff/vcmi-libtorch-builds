@@ -68,6 +68,9 @@ jobs:
     #    set -eux
     #    curl -LO https://github.com/pytorch/pytorch/releases/download/${PYTORCH_REF}/pytorch-${PYTORCH_REF}.tar.gz
 
+    - name: Enable Git long paths
+      run: git config --global core.longpaths true
+
     - name: Checkout pytorch
       uses: actions/checkout@v4
       with:
