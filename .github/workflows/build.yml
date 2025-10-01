@@ -70,11 +70,9 @@ jobs:
 
     - name: Build
       id: build
-      env:
-        INPUT_ARCHIVE_FILE: pytorch-${PYTORCH_REF}.tar.gz
-        OUTPUT_ARCHIVE_FILE: libtorch-${PYTORCH_REF}-${{matrix.target}}.txz
-        PYTORCH_REF: ${PYTORCH_REF}
       run: |
+        export INPUT_ARCHIVE_FILE=pytorch-${PYTORCH_REF}.tar.gz
+        export OUTPUT_ARCHIVE_FILE=libtorch-${PYTORCH_REF}-${{matrix.target}}.txz
         bash -x "${{matrix.target}}.sh"
         echo "artifact=$OUTPUT_ARCHIVE_FILE" >> $GITHUB_OUTPUT
 
