@@ -34,7 +34,7 @@ jobs:
           - builder: ubuntu-latest
             target: linux-x64
 
-          - builder: macos-15
+          - builder: macos-15-intel
             target: macos-x64
 
           - builder: macos-15
