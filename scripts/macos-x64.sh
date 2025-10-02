@@ -20,6 +20,7 @@ args=(
   -DUSE_DISTRIBUTED=0
   -DUSE_LITE_INTERPRETER_PROFILER=0
   -DUSE_KINETO=0
+  -DUSE_FBGEMM=0
 )
 
 BUILD_ROOT=build_mac scripts/build_local.sh "${args[@]}"
