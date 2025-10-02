@@ -1,17 +1,12 @@
 name: VCMI libtorch builds
 
 on:
-  push:
-    branches:
-      - 2025-update
   workflow_dispatch:
     inputs:
       pytorch_ref:
         description: pytorch ref (commit SHA or tag)
         required: true
-        default: "v2.8.0"  # ba56102387ef21a3b04b357e5b183d48f0afefc7
-env:
-  PYTORCH_REF: ${{ inputs.pytorch_ref || 'v2.8.0' }}
+        default: "v2.7.1"  # e2d141dbde55c2a4370fac5165b0561b6af4798b
 
 jobs:
   build:
@@ -76,7 +71,7 @@ jobs:
 
         cd pytorch
         for t in $targets; do
-          dir="patches/${PYTORCH_REF}/$t"
+          dir="patches/${{inputs.pytorch_ref}}/$t"
           [ -d "$dir" ] || continue
 
           for p in "$dir/"*.patch; do
@@ -88,7 +83,7 @@ jobs:
     - name: Build
       id: build
       run: |
-        export OUTPUT_ARCHIVE_FILE=libtorch-${PYTORCH_REF}-${{matrix.target}}.txz
+        export OUTPUT_ARCHIVE_FILE=libtorch-${{inputs.pytorch_ref}}-${{matrix.target}}.txz
         bash -x "scripts/${{matrix.target}}.sh"
         echo "artifact=$OUTPUT_ARCHIVE_FILE" >> $GITHUB_OUTPUT
 
