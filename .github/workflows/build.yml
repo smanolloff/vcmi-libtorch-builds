@@ -49,7 +49,6 @@ jobs:
           # 32-bit android (armeabi-v7a) builds fail with assembler error
           # (same issue as https://github.com/tensorflow/tensorflow/issues/59970)
 
-    if: ${{ inputs.target == 'all' || inputs.target == matrix.target }}
     runs-on: ${{ matrix.builder }}
     defaults:
       run:
@@ -57,20 +56,23 @@ jobs:
 
     steps:
     - name: Checkout (this)
+      if: ${{ inputs.target == matrix.target || inputs.target == 'all' }}
       uses: actions/checkout@v5
 
     - name: Setup Python
+      if: ${{ inputs.target == matrix.target || inputs.target == 'all' }}
       uses: actions/setup-python@v5
       with:
         python-version: '3.13'
 
     - name: Git config
-      if: ${{ matrix.target == 'win-x64' }}
+      if: ${{ matrix.target == 'win-x64' && (inputs.target == matrix.target || inputs.target == 'all') }}
       run: |
         git config --global core.longpaths true
         git config --global core.autocrlf true
 
     - name: Checkout pytorch
+      if: ${{ inputs.target == matrix.target || inputs.target == 'all' }}
       uses: actions/checkout@v5
       with:
         submodules: recursive
@@ -79,6 +81,7 @@ jobs:
         path: pytorch
 
     - name: Patch
+      if: ${{ inputs.target == matrix.target || inputs.target == 'all' }}
       run: |
         set -euox pipefail
         targets="generic ${{matrix.target}}"
@@ -95,6 +98,7 @@ jobs:
         done
 
     - name: Build
+      if: ${{ inputs.target == matrix.target || inputs.target == 'all' }}
       id: build
       run: |
         export OUTPUT_ARCHIVE_FILE=libtorch-${{inputs.pytorch_ref}}-${{matrix.target}}.txz
@@ -102,6 +106,7 @@ jobs:
         echo "artifact=$OUTPUT_ARCHIVE_FILE" >> $GITHUB_OUTPUT
 
     - name: Upload artifact
+      if: ${{ inputs.target == matrix.target || inputs.target == 'all' }}
       uses: actions/upload-artifact@v4
       with:
         name: "${{steps.build.outputs.artifact}}"
