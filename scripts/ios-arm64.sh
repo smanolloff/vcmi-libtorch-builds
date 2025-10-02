@@ -3,22 +3,21 @@
 set -eux
 
 cd pytorch
-which ninja
 python -m venv .venv
 . .venv/bin/activate
-which ninja
 pip install cmake ninja
-which ninja
 pip install -r requirements.txt
 
 # build_ios.sh *must* be used for ios builds
 
+export BUILD_LITE_INTERPRETER=1
+
 args=(
   -G Ninja  # 'make' not available on macos runners
+  -DCMAKE_MAKE_PROGRAM="$(which ninja)"
 )
 
-which ninja
-BUILD_LITE_INTERPRETER=1 scripts/build_ios.sh  "${args[@]}"
+scripts/build_ios.sh  "${args[@]}"
 
 mv build_ios/{install,libtorch}
 tar --create --xz --file "../$OUTPUT_ARCHIVE_FILE" -C build_ios libtorch
