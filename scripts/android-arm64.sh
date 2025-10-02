@@ -10,8 +10,9 @@ if [ "$ANDROID_NDK" != "$EXPECTED_ANDROID_NDK" ]; then
   exit 1
 fi
 
-tar -zxf $INPUT_ARCHIVE_FILE
-cd "pytorch-$PYTORCH_REF"
+cd pytorch
+pip -m venv .venv
+. ./venv/bin/activate
 pip install cmake ninja
 pip install -r requirements.txt
 

@@ -2,6 +2,7 @@
 
 set -eux
 
+# 7z produces .txz archives
 if [ "$OUTPUT_ARCHIVE_FILE" != "${OUTPUT_ARCHIVE_FILE%.txz}.txz" ]; then
   echo "Expected OUTPUT_ARCHIVE_FILE to end with .txz: $OUTPUT_ARCHIVE_FILE" >&2
   exit 1
@@ -38,4 +39,3 @@ TAR_FILE="${OUTPUT_ARCHIVE_FILE%.*}.tar"
 7z a -ttar "${TAR_FILE}" "libtorch"
 7z a -txz "$OUTPUT_ARCHIVE_FILE" "${TAR_FILE}"
 mv "$OUTPUT_ARCHIVE_FILE" ..
-
