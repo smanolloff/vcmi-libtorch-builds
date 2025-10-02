@@ -12,7 +12,7 @@ fi
 
 cd pytorch
 python -m venv .venv
-. ./venv/bin/activate
+. .venv/bin/activate
 pip install cmake ninja
 pip install -r requirements.txt
 
