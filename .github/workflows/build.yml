@@ -24,26 +24,23 @@ jobs:
           - builder: windows-2025
             target: win-x64
 
-          #- builder: ubuntu-latest
-          #  target: linux-x64
+          - builder: ubuntu-latest
+           target: linux-x64
 
-          #- builder: macos-14
-          #  target: macos-x64
+          - builder: macos-15
+           target: macos-x64
 
-          #- builder: macos-14
-          #  target: macos-arm64
+          - builder: macos-15
+           target: macos-arm64
 
-          #- builder: macos-14
-          #  target: ios-arm64
+          - builder: macos-15
+           target: ios-arm64
 
-          #- builder: macos-14
-          #  target: android-arm64
+          - builder: macos-15
+           target: android-arm64
 
           # 32-bit android (armeabi-v7a) builds fail with assembler error
           # (same issue as https://github.com/tensorflow/tensorflow/issues/59970)
-          #
-          # mingw builds are not supported
-          # (see https://stackoverflow.com/a/76160277)
 
     runs-on: ${{ matrix.builder }}
     defaults:
@@ -59,32 +56,40 @@ jobs:
       with:
         python-version: '3.13'
 
-    #- name: Setup Rust toolchain
-    #  if: ${{ matrix.target == 'win-x64' }}
-    #  uses: dtolnay/rust-toolchain@stable
-
-    #- name: Download pytorch
-    #  run: |
-    #    set -eux
-    #    curl -LO https://github.com/pytorch/pytorch/releases/download/${PYTORCH_REF}/pytorch-${PYTORCH_REF}.tar.gz
-
-    - name: Enable Git long paths
-      run: git config --global core.longpaths true
+    - name: Git config
+      run: |
+        git config --global core.longpaths true
+        git config --global core.autocrlf true
 
     - name: Checkout pytorch
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: recursive
         repository: pytorch/pytorch
         ref: "${{ inputs.pytorch_ref }}"
         path: pytorch
 
+    - name: Patch
+      run: |
+        set -euox pipefail
+        targets="generic ${{matrix.target}}"
+
+        cd pytorch
+        for t in $targets; do
+          dir="patches/${PYTORCH_REF}/$t"
+          [ -d "$dir" ] || continue
+
+          for p in "$dir/"*.patch; do
+            [ -r "$p" ] || continue
+            git apply -v "../$p"
+          done
+        done
+
     - name: Build
       id: build
       run: |
-        #export INPUT_ARCHIVE_FILE=pytorch-${PYTORCH_REF}.tar.gz
         export OUTPUT_ARCHIVE_FILE=libtorch-${PYTORCH_REF}-${{matrix.target}}.txz
-        bash -x "${{matrix.target}}.sh"
+        bash -x "scripts/${{matrix.target}}.sh"
         echo "artifact=$OUTPUT_ARCHIVE_FILE" >> $GITHUB_OUTPUT
 
     - name: Upload artifact
