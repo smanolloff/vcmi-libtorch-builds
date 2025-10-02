@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       pytorch_ref:
-        description: pytorch ref (commit SHA or tag)
+        description: "pytorch ref (commit SHA or tag)"
         required: true
         default: "v2.7.1"  # e2d141dbde55c2a4370fac5165b0561b6af4798b
 
@@ -20,19 +20,19 @@ jobs:
             target: win-x64
 
           - builder: ubuntu-latest
-           target: linux-x64
+            target: linux-x64
 
           - builder: macos-15
-           target: macos-x64
+            target: macos-x64
 
           - builder: macos-15
-           target: macos-arm64
+            target: macos-arm64
 
           - builder: macos-15
-           target: ios-arm64
+            target: ios-arm64
 
           - builder: macos-15
-           target: android-arm64
+            target: android-arm64
 
           # 32-bit android (armeabi-v7a) builds fail with assembler error
           # (same issue as https://github.com/tensorflow/tensorflow/issues/59970)
