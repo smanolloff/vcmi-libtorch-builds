@@ -12,7 +12,6 @@ pip install -r requirements.txt
 # (and seems to produce smaller binaries compared to setup.py)
 
 args=(
-  -G Ninja  # 'make' no longer available on macos runners
   -DCMAKE_INSTALL_PREFIX=libtorch  # must be available during build
   -DBUILD_LITE_INTERPRETER=0  # causes errors (undefined symbols)
   -DBUILD_PYTHON=0
