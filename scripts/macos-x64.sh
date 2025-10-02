@@ -3,7 +3,7 @@
 set -eux
 
 cd pytorch
-pip -m venv .venv
+python -m venv .venv
 . ./venv/bin/activate
 pip install cmake ninja
 pip install -r requirements.txt

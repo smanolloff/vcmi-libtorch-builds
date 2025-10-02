@@ -11,7 +11,7 @@ if [ "$ANDROID_NDK" != "$EXPECTED_ANDROID_NDK" ]; then
 fi
 
 cd pytorch
-pip -m venv .venv
+python -m venv .venv
 . ./venv/bin/activate
 pip install cmake ninja
 pip install -r requirements.txt
