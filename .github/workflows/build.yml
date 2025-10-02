@@ -7,14 +7,26 @@ on:
         description: "pytorch ref (commit SHA or tag)"
         required: true
         default: "v2.7.1"  # e2d141dbde55c2a4370fac5165b0561b6af4798b
+      target:
+        description: "Target to build"
+        type: choice
+        default: all
+        options:
+          - all
+          - win-x64
+          - linux-x64
+          - macos-x64
+          - macos-arm64
+          - ios-arm64
+          - android-arm64
 
 jobs:
   build:
     strategy:
       fail-fast: false
       matrix:
-        # Info about available images:
-        # https://github.com/actions/runner-images/tree/740ab068bcf1d072e2b1db63af8b77f1539dbd39?tab=readme-ov-file#available-images
+        # https://docs.github.com/en/actions/reference/runners/github-hosted-runners#standard-github-hosted-runners-for-public-repositories
+        # https://github.com/actions/runner-images/tree/main
         include:
           - builder: windows-2025
             target: win-x64
@@ -37,6 +49,7 @@ jobs:
           # 32-bit android (armeabi-v7a) builds fail with assembler error
           # (same issue as https://github.com/tensorflow/tensorflow/issues/59970)
 
+    if: ${{ inputs.target == 'all' || inputs.target == matrix.target }}
     runs-on: ${{ matrix.builder }}
     defaults:
       run:
