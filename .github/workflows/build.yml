@@ -101,7 +101,7 @@ jobs:
       if: ${{ inputs.target == matrix.target || inputs.target == 'all' }}
       id: build
       run: |
-        export OUTPUT_ARCHIVE_FILE=libtorch-${{matrix.target}}.txz
+        export OUTPUT_ARCHIVE_FILE=vcmi-libtorch-${{matrix.target}}.txz
         bash -x "scripts/${{matrix.target}}.sh"
         echo "artifact=$OUTPUT_ARCHIVE_FILE" >> $GITHUB_OUTPUT
 
