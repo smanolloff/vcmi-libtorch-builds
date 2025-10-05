@@ -31,28 +31,25 @@ jobs:
           - builder: windows-11-arm
             target: win-arm64
 
-          # - builder: windows-2025
-          #   target: win-x64
+          - builder: windows-2025
+            target: win-x64
 
-          # - builder: ubuntu-latest
-          #   target: linux-x64
+          - builder: ubuntu-latest
+            target: linux-x64
 
-          # - builder: macos-15-intel
-          #   target: macos-x64
-
-          # - builder: macos-15
-          #   target: macos-arm64
-
-          # - builder: macos-15
-          #   target: ios-arm64
-
-          # - builder: macos-15
-          #   target: android-arm64
+          - builder: macos-15-intel
+            target: macos-x64
 
           - builder: macos-15
-            target: android-x64
+            target: macos-arm64
 
-          - builder: ubuntu-24.04
+          - builder: macos-15
+            target: ios-arm64
+
+          - builder: macos-15
+            target: android-arm64
+
+          - builder: macos-15
             target: android-x64
 
           # 32-bit android (armeabi-v7a) builds fail with assembler error
