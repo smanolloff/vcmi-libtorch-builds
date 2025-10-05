@@ -27,7 +27,7 @@ export GRADLE_PATH="$PWD/android/gradlew"
 export LIB_DIR="$PWD/android/pytorch_android/src/main/jniLibs"
 export INCLUDE_DIR="$PWD/android/pytorch_android/src/main/cpp/libtorch_include"
 export ANDROID_BUILD_ROOT="$PWD/build_android"
-export ANDROID_ABI=x86-64
+export ANDROID_ABI=x86_64
 export BUILD_ROOT="$PWD/build_android"
 export BUILD_LITE_INTERPRETER=1
 
