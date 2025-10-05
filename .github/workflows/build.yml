@@ -49,6 +49,12 @@ jobs:
           # - builder: macos-15
           #   target: android-arm64
 
+          - builder: macos-15
+            target: android-x64
+
+          - builder: ubuntu-24.04
+            target: android-x64
+
           # 32-bit android (armeabi-v7a) builds fail with assembler error
           # (same issue as https://github.com/tensorflow/tensorflow/issues/59970)
 
@@ -74,14 +80,29 @@ jobs:
         git config --global core.longpaths true
         git config --global core.autocrlf true
 
+    - name: Restore pytorch_src cache
+      if: inputs.target == matrix.target || inputs.target == 'all'
+      id: cache_pytorch_src
+      uses: actions/cache@v4
+      with:
+        path: pytorch
+        key: cache_pytorch_src-${{ inputs.pytorch_ref }}
+
     - name: Checkout pytorch
-      if: ${{ inputs.target == matrix.target || inputs.target == 'all' }}
+      if: steps.cache_pytorch_src.outputs.cache-hit != 'true'  && (inputs.target == matrix.target || inputs.target == 'all')
       uses: actions/checkout@v5
       with:
         submodules: recursive
         repository: pytorch/pytorch
         ref: "${{ inputs.pytorch_ref }}"
         path: pytorch
+
+    - name: Save pytorch_src cache
+      if: steps.cache_pytorch_src.outputs.cache-hit != 'true' && (inputs.target == matrix.target || inputs.target == 'all')
+      uses: actions/cache/save@v4
+      with:
+        path: pytorch
+        key: cache_pytorch_src-${{ inputs.pytorch_ref }}
 
     - name: Patch
       if: ${{ inputs.target == matrix.target || inputs.target == 'all' }}
