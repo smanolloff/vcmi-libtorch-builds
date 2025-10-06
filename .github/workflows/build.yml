@@ -14,11 +14,13 @@ on:
         options:
           - all
           - win-x64
+          - win-arm64
           - linux-x64
           - macos-x64
           - macos-arm64
           - ios-arm64
           - android-arm64
+          - android-x64
 
 jobs:
   build:
