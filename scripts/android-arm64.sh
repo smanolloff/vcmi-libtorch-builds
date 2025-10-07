@@ -3,12 +3,12 @@
 set -eux
 
 # https://github.com/actions/runner-images/blob/main/images/macos/macos-15-arm64-Readme.md
-EXPECTED_ANDROID_NDK="/Users/runner/Library/Android/sdk/ndk/27.3.13750724"
+# EXPECTED_ANDROID_NDK="/Users/runner/Library/Android/sdk/ndk/27.3.13750724"
 
-if [ "$ANDROID_NDK" != "$EXPECTED_ANDROID_NDK" ]; then
-  echo "Unexpected android home: have: $ANDROID_NDK, want: $EXPECTED_ANDROID_NDK" >&2
-  exit 1
-fi
+# if [ "$ANDROID_NDK" != "$EXPECTED_ANDROID_NDK" ]; then
+#   echo "Unexpected android home: have: $ANDROID_NDK, want: $EXPECTED_ANDROID_NDK" >&2
+#   exit 1
+# fi
 
 cd pytorch
 python -m venv .venv
