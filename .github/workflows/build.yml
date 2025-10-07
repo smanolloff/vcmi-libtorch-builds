@@ -123,9 +123,12 @@ jobs:
     - name: set ANDROID_NDK
       if: ${{ contains(matrix.target, 'android') && (inputs.target == matrix.target || inputs.target == 'all') }}
       run: |
+        set -x
         cd "$ANDROID_HOME/ndk"
         curl -LO https://dl.google.com/android/repository/android-ndk-r25c-linux.zip
-        unzip android-ndk-r25c-linux.zip
+        find android-ndk-r25c/ || :
+        rm -rf android-ndk-r25c/
+        unzip -o android-ndk-r25c-linux.zip
         echo "ANDROID_NDK=$ANDROID_HOME/ndk/android-ndk-r25c" >> $GITHUB_ENV
         echo "ANDROID_NDK_HOME=$ANDROID_NDK" >> $GITHUB_ENV
         echo "ANDROID_NDK_ROOT=$ANDROID_NDK" >> $GITHUB_ENV
