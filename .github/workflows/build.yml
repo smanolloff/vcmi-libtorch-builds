@@ -48,8 +48,8 @@ jobs:
           - builder: macos-15
             target: ios-arm64
 
-          # - builder: macos-15
-          #   target: android-arm64
+          - builder: macos-15
+            target: android-arm64
 
           # - builder: macos-15
           #   target: android-x64
@@ -119,6 +119,13 @@ jobs:
             git apply -v "../$p"
           done
         done
+
+    - name: set ANDROID_NDK
+      if: ${{ contains(inputs.target, 'android') && (inputs.target == matrix.target || inputs.target == 'all') }}
+      run: |
+        echo ANDROID_NDK=/Users/runner/Library/Android/sdk/ndk/26.3.11579264
+        echo ANDROID_NDK_HOME=/Users/runner/Library/Android/sdk/ndk/26.3.11579264
+        echo ANDROID_NDK_ROOT=/Users/runner/Library/Android/sdk/ndk/26.3.11579264
 
     - name: Build
       if: ${{ inputs.target == matrix.target || inputs.target == 'all' }}
