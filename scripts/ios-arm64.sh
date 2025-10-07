@@ -14,12 +14,10 @@ export BUILD_LITE_INTERPRETER=1
 # XXX: setting those as env vars as well results in an error?
 #      building for 'macOS', but linking in dylib (...) built for 'iOS'
 export IOS_DEPLOYMENT_TARGET=12.0
-# export MACOSX_DEPLOYMENT_TARGET=12.0
-export DCMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET=12.0
+export MACOSX_DEPLOYMENT_TARGET=12.0
 
 args=(
   -DCMAKE_MAKE_PROGRAM="$(which make)"    # prevents 'No rule to make target `install''
-  -DCMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET=12.0
 )
 
 # build_ios.sh *must* be used for ios builds
