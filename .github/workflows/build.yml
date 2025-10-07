@@ -121,7 +121,7 @@ jobs:
         done
 
     - name: set ANDROID_NDK
-      if: ${{ contains(inputs.target, 'android') && (inputs.target == matrix.target || inputs.target == 'all') }}
+      if: ${{ contains(matrix.target, 'android') && (inputs.target == matrix.target || inputs.target == 'all') }}
       run: |
         cd "$ANDROID_HOME/ndk"
         curl -LO https://dl.google.com/android/repository/android-ndk-r25c-linux.zip
