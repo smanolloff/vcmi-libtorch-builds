@@ -30,29 +30,29 @@ jobs:
         # https://docs.github.com/en/actions/reference/runners/github-hosted-runners#standard-github-hosted-runners-for-public-repositories
         # https://github.com/actions/runner-images/tree/main
         include:
-          - builder: windows-11-arm
-            target: win-arm64
+          # - builder: windows-11-arm
+          #   target: win-arm64
 
-          - builder: windows-2025
-            target: win-x64
+          # - builder: windows-2025
+          #   target: win-x64
 
-          - builder: ubuntu-latest
-            target: linux-x64
+          # - builder: ubuntu-latest
+          #   target: linux-x64
 
-          - builder: macos-15-intel
-            target: macos-x64
+          # - builder: macos-15-intel
+          #   target: macos-x64
 
-          - builder: macos-15
-            target: macos-arm64
+          # - builder: macos-15
+          #   target: macos-arm64
 
           - builder: macos-15
             target: ios-arm64
 
-          - builder: macos-15
-            target: android-arm64
+          # - builder: macos-15
+          #   target: android-arm64
 
-          - builder: macos-15
-            target: android-x64
+          # - builder: macos-15
+          #   target: android-x64
 
           # 32-bit android (armeabi-v7a) builds fail with assembler error
           # (same issue as https://github.com/tensorflow/tensorflow/issues/59970)

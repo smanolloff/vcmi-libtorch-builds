@@ -15,9 +15,13 @@ export BUILD_LITE_INTERPRETER=1
 #      building for 'macOS', but linking in dylib (...) built for 'iOS'
 export IOS_DEPLOYMENT_TARGET=12.0
 export MACOSX_DEPLOYMENT_TARGET=12.0
+export CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET=12.0
 
 args=(
   -DCMAKE_MAKE_PROGRAM="$(which make)"    # prevents 'No rule to make target `install''
+  -DIOS_DEPLOYMENT_TARGET=12.0
+  -DMACOSX_DEPLOYMENT_TARGET=12.0
+  -DCMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET=12.0
 )
 
 # build_ios.sh *must* be used for ios builds
