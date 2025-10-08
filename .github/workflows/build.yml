@@ -96,6 +96,13 @@ jobs:
         ref: "${{ inputs.pytorch_ref }}"
         path: pytorch
 
+    - name: Get pytorch commit SHA
+      id: pytorch_sha
+      run: |
+        cd pytorch
+        sha=$(git rev-parse --short=8 HEAD)
+        echo "sha=$sha" >> "$GITHUB_OUTPUT"
+
     - name: Save pytorch_src cache
       if: steps.cache_pytorch_src.outputs.cache-hit != 'true' && (inputs.target == matrix.target || inputs.target == 'all')
       uses: actions/cache/save@v4
@@ -137,7 +144,7 @@ jobs:
         # echo "artifact=$art" >> $GITHUB_OUTPUT
 
         echo "artifact_root=$ARTIFACT_ROOT" >> $GITHUB_OUTPUT
-        echo "artifact_name=vcmi-libtorch-${{inputs.pytorch_ref}}-${{matrix.target}}.zip" >> $GITHUB_OUTPUT
+        echo "artifact_name=vcmi-libtorch-${{matrix.target}}-${{inputs.pytorch_ref}}-${{steps.pytorch_sha.outputs.sha}}.zip" >> $GITHUB_OUTPUT
 
     - name: Upload artifact
       if: ${{ inputs.target == matrix.target || inputs.target == 'all' }}
