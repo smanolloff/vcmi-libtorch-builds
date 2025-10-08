@@ -124,15 +124,26 @@ jobs:
       if: ${{ inputs.target == matrix.target || inputs.target == 'all' }}
       id: build
       run: |
-        export OUTPUT_ARCHIVE_FILE=vcmi-libtorch-${{matrix.target}}.txz
+        export ARTIFACT_ROOT="${{github.workspace}}/artifact-root"
+        mkdir -p "$ARTIFACT_ROOT"
+
         bash -x "scripts/${{matrix.target}}.sh"
-        echo "artifact=$OUTPUT_ARCHIVE_FILE" >> $GITHUB_OUTPUT
+
+        # # Add sha-256 to file name for traceability
+        # # (GHA also shows the sha-256, but after zipping the file)
+        # sha=$(openssl dgst -sha256 $OUTPUT_ARCHIVE_FILE | awk '{print $2}')
+        # art=${OUTPUT_ARCHIVE_FILE/.txz/$sha.txz}
+        # mv $OUTPUT_ARCHIVE_FILE $art
+        # echo "artifact=$art" >> $GITHUB_OUTPUT
+
+        echo "artifact_root=$ARTIFACT_ROOT" >> $GITHUB_OUTPUT
+        echo "artifacT_name=vcmi-libtorch-${{matrix.target}}.zip" >> $GITHUB_OUTPUT
 
     - name: Upload artifact
       if: ${{ inputs.target == matrix.target || inputs.target == 'all' }}
       uses: actions/upload-artifact@v4
       with:
-        name: "${{steps.build.outputs.artifact}}"
-        path: "${{steps.build.outputs.artifact}}"
-        compression-level: 0
+        name: "${{steps.build.outputs.artifact_name}}"
+        path: "${{steps.build.outputs.artifact_root}}"
+        compression-level: 6
         if-no-files-found: error

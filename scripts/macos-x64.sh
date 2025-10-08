@@ -2,28 +2,33 @@
 
 set -eux
 
+[ -d "$ARTIFACT_ROOT" ] || { echo "ARTIFACT_ROOT does not exist: $ARTIFACT_ROOT"; exit 1; }
+
 cd pytorch
-python -m venv .venv
-. .venv/bin/activate
-pip install cmake ninja
-pip install -r requirements.txt
+# python -m venv .venv
+# . .venv/bin/activate
+# pip install cmake ninja
+# pip install -r requirements.txt
 
-# build_local *may* be used for mac builds
-# (and seems to produce smaller binaries compared to setup.py)
+# # build_local *may* be used for mac builds
+# # (and seems to produce smaller binaries compared to setup.py)
 
-args=(
-  -DCMAKE_INSTALL_PREFIX=libtorch  # must be available during build
-  -DBUILD_LITE_INTERPRETER=0  # causes errors (undefined symbols)
-  -DBUILD_PYTHON=0
-  -DBUILD_TEST=0
-  -DUSE_CUDA=0
-  -DUSE_DISTRIBUTED=0
-  -DUSE_LITE_INTERPRETER_PROFILER=0
-  -DUSE_KINETO=0
-  -DUSE_FBGEMM=0
-)
+# args=(
+#   -DCMAKE_INSTALL_PREFIX=libtorch  # must be available during build
+#   -DBUILD_LITE_INTERPRETER=0  # causes errors (undefined symbols)
+#   -DBUILD_PYTHON=0
+#   -DBUILD_TEST=0
+#   -DUSE_CUDA=0
+#   -DUSE_DISTRIBUTED=0
+#   -DUSE_LITE_INTERPRETER_PROFILER=0
+#   -DUSE_KINETO=0
+#   -DUSE_FBGEMM=0
+# )
 
-BUILD_ROOT=build_mac scripts/build_local.sh "${args[@]}"
-cmake -P build_mac/cmake_install.cmake
+# BUILD_ROOT=build_mac scripts/build_local.sh "${args[@]}"
+# cmake -P build_mac/cmake_install.cmake
 
-tar --create --xz --file "../$OUTPUT_ARCHIVE_FILE" -C build_mac libtorch
+mkdir -p build_mac/libtorch
+echo "test" > build_mac/libtorch/testfile.txt
+
+mv build_mac/libtorch "$ARTIFACT_ROOT/libtorch"
