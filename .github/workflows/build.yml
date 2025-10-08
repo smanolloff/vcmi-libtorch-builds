@@ -9,39 +9,41 @@ on:
       pytorch_ref:
         description: "pytorch ref (commit SHA or tag)"
         required: true
-        default: "v2.6.0"
+        default: &default_ref "v2.6.0"
 
 jobs:
   build:
+    env:
+      DEFAULT_REF: *default_ref
     strategy:
       fail-fast: false
       matrix:
         # https://docs.github.com/en/actions/reference/runners/github-hosted-runners#standard-github-hosted-runners-for-public-repositories
         # https://github.com/actions/runner-images/tree/main
         include:
-          - builder: windows-11-arm
-            target: win-arm64
+          # - builder: windows-11-arm
+          #   target: win-arm64
 
-          - builder: windows-2025
-            target: win-x64
+          # - builder: windows-2025
+          #   target: win-x64
 
-          - builder: ubuntu-latest
-            target: linux-x64
+          # - builder: ubuntu-latest
+          #   target: linux-x64
 
-          - builder: macos-15-intel
-            target: macos-x64
+          # - builder: macos-15-intel
+          #   target: macos-x64
 
           - builder: macos-15
             target: macos-arm64
 
-          - builder: macos-15
-            target: ios-arm64
+          # - builder: macos-15
+          #   target: ios-arm64
 
-          - builder: macos-15
-            target: android-arm64
+          # - builder: macos-15
+          #   target: android-arm64
 
-          - builder: macos-15
-            target: android-x64
+          # - builder: macos-15
+          #   target: android-x64
 
           # 32-bit android (armeabi-v7a) builds fail with assembler error
           # (same issue as https://github.com/tensorflow/tensorflow/issues/59970)
@@ -66,12 +68,17 @@ jobs:
         git config --global core.longpaths true
         git config --global core.autocrlf true
 
+    - name: Set PYTORCH_REF
+      run: |
+        set -x
+        echo "PYTORCH_REF=${{ inputs.pytorch_ref || env.DEFAULT_REF }}" >> $GITHUB_ENV
+
     - name: Restore pytorch_src cache
       id: cache_pytorch_src
       uses: actions/cache@v4
       with:
         path: pytorch
-        key: cache_pytorch_src-${{ inputs.pytorch_ref }}
+        key: cache_pytorch_src-${{ env.PYTORCH_REF }}
 
     - name: Checkout pytorch
       if: steps.cache_pytorch_src.outputs.cache-hit != 'true'
@@ -79,7 +86,7 @@ jobs:
       with:
         submodules: recursive
         repository: pytorch/pytorch
-        ref: "${{ inputs.pytorch_ref }}"
+        ref: "${{ env.PYTORCH_REF }}"
         path: pytorch
 
     - name: Save pytorch_src cache
@@ -87,14 +94,14 @@ jobs:
       uses: actions/cache/save@v4
       with:
         path: pytorch
-        key: cache_pytorch_src-${{ inputs.pytorch_ref }}
+        key: cache_pytorch_src-${{ env.PYTORCH_REF }}
 
-    - name: Get pytorch commit SHA
-      id: pytorch_sha
+    - name: Set PYTORCH_SHA
       run: |
+        set -x
         cd pytorch
         sha=$(git rev-parse --short=8 HEAD)
-        echo "sha=$sha" >> "$GITHUB_OUTPUT"
+        echo "PYTORCH_SHA=$sha" >> $GITHUB_ENV
 
     - name: Patch
       run: |
@@ -115,6 +122,7 @@ jobs:
     - name: Build
       id: build
       run: |
+        set -x
         export ARTIFACT_ROOT="${{github.workspace}}/artifact-root"
         mkdir -p "$ARTIFACT_ROOT"
 
@@ -128,12 +136,12 @@ jobs:
         # echo "artifact=$art" >> $GITHUB_OUTPUT
 
         echo "artifact_root=$ARTIFACT_ROOT" >> $GITHUB_OUTPUT
-        echo "artifact_name=vcmi-libtorch-${{matrix.target}}-${{inputs.pytorch_ref}}-${{steps.pytorch_sha.outputs.sha}}.zip" >> $GITHUB_OUTPUT
+        echo "artifact_name=vcmi-libtorch-${{matrix.target}}-$PYTORCH_REF-$PYTORCH_SHA.zip" >> $GITHUB_OUTPUT
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: "${{steps.build.outputs.artifact_name}}"
         path: "${{steps.build.outputs.artifact_root}}"
-        compression-level: 6
+        compression-level: 9
         if-no-files-found: error
