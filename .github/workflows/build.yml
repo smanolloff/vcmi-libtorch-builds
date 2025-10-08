@@ -1,26 +1,15 @@
 name: VCMI libtorch builds
 
 on:
+  push:
+    branches:
+      - lower-pytorch
   workflow_dispatch:
     inputs:
       pytorch_ref:
         description: "pytorch ref (commit SHA or tag)"
         required: true
-        default: "v2.7.1"  # e2d141dbde55c2a4370fac5165b0561b6af4798b
-      target:
-        description: "Target to build"
-        type: choice
-        default: all
-        options:
-          - all
-          - win-x64
-          - win-arm64
-          - linux-x64
-          - macos-x64
-          - macos-arm64
-          - ios-arm64
-          - android-arm64
-          - android-x64
+        default: "v2.6.0"
 
 jobs:
   build:
@@ -64,23 +53,20 @@ jobs:
 
     steps:
     - name: Checkout (this)
-      if: ${{ inputs.target == matrix.target || inputs.target == 'all' }}
       uses: actions/checkout@v5
 
     - name: Setup Python
-      if: ${{ inputs.target == matrix.target || inputs.target == 'all' }}
       uses: actions/setup-python@v5
       with:
         python-version: '3.13'
 
     - name: Git config
-      if: ${{ startsWith(matrix.target, 'win-') && (inputs.target == matrix.target || inputs.target == 'all') }}
+      if: startsWith(matrix.target, 'win-')
       run: |
         git config --global core.longpaths true
         git config --global core.autocrlf true
 
     - name: Restore pytorch_src cache
-      if: inputs.target == matrix.target || inputs.target == 'all'
       id: cache_pytorch_src
       uses: actions/cache@v4
       with:
@@ -88,13 +74,20 @@ jobs:
         key: cache_pytorch_src-${{ inputs.pytorch_ref }}
 
     - name: Checkout pytorch
-      if: steps.cache_pytorch_src.outputs.cache-hit != 'true'  && (inputs.target == matrix.target || inputs.target == 'all')
+      if: steps.cache_pytorch_src.outputs.cache-hit != 'true'
       uses: actions/checkout@v5
       with:
         submodules: recursive
         repository: pytorch/pytorch
         ref: "${{ inputs.pytorch_ref }}"
         path: pytorch
+
+    - name: Save pytorch_src cache
+      if: steps.cache_pytorch_src.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: pytorch
+        key: cache_pytorch_src-${{ inputs.pytorch_ref }}
 
     - name: Get pytorch commit SHA
       id: pytorch_sha
@@ -103,15 +96,7 @@ jobs:
         sha=$(git rev-parse --short=8 HEAD)
         echo "sha=$sha" >> "$GITHUB_OUTPUT"
 
-    - name: Save pytorch_src cache
-      if: steps.cache_pytorch_src.outputs.cache-hit != 'true' && (inputs.target == matrix.target || inputs.target == 'all')
-      uses: actions/cache/save@v4
-      with:
-        path: pytorch
-        key: cache_pytorch_src-${{ inputs.pytorch_ref }}
-
     - name: Patch
-      if: ${{ inputs.target == matrix.target || inputs.target == 'all' }}
       run: |
         set -euox pipefail
         targets="generic ${{matrix.target}}"
@@ -128,7 +113,6 @@ jobs:
         done
 
     - name: Build
-      if: ${{ inputs.target == matrix.target || inputs.target == 'all' }}
       id: build
       run: |
         export ARTIFACT_ROOT="${{github.workspace}}/artifact-root"
@@ -147,7 +131,6 @@ jobs:
         echo "artifact_name=vcmi-libtorch-${{matrix.target}}-${{inputs.pytorch_ref}}-${{steps.pytorch_sha.outputs.sha}}.zip" >> $GITHUB_OUTPUT
 
     - name: Upload artifact
-      if: ${{ inputs.target == matrix.target || inputs.target == 'all' }}
       uses: actions/upload-artifact@v4
       with:
         name: "${{steps.build.outputs.artifact_name}}"
