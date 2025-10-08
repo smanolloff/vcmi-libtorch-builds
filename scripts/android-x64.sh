@@ -16,7 +16,7 @@ fi
 cd pytorch
 python -m venv .venv
 . .venv/bin/activate
-pip install cmake ninja
+pip install 'cmake<4' ninja
 pip install -r requirements.txt
 
 # build_android.sh *must* be used for android builds

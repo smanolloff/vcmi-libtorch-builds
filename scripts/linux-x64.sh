@@ -7,7 +7,7 @@ set -eux
 cd pytorch
 python -m venv .venv
 . .venv/bin/activate
-pip install cmake ninja
+pip install 'cmake<4' ninja
 pip install -r requirements.txt
 
 # MKL is intel-specific

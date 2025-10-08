@@ -7,7 +7,7 @@ set -eux
 cd pytorch
 python -m venv .venv
 . .venv/bin/activate
-pip install cmake
+pip install 'cmake<4'
 pip install -r requirements.txt
 
 export BUILD_LITE_INTERPRETER=1
