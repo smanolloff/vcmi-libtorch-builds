@@ -9,7 +9,7 @@ on:
       pytorch_ref:
         description: "pytorch ref (commit SHA or tag)"
         required: true
-        default: &default_ref "v2.4.1"
+        default: &default_ref "v2.6.0"
 
 jobs:
   build:
@@ -21,24 +21,25 @@ jobs:
         # https://docs.github.com/en/actions/reference/runners/github-hosted-runners#standard-github-hosted-runners-for-public-repositories
         # https://github.com/actions/runner-images/tree/main
         include:
-          # - builder: windows-11-arm
-          #   target: win-arm64
+          - builder: windows-11-arm
+            target: win-arm64
 
-          # - builder: windows-2025
-          #   target: win-x64
+          - builder: windows-2025
+            target: win-x64
 
-          # - builder: ubuntu-latest
-          #   target: linux-x64
+          - builder: ubuntu-latest
+            target: linux-x64
 
-          # - builder: macos-15-intel
-          #   target: macos-x64
+          - builder: macos-15-intel
+            target: macos-x64
 
-          # - builder: macos-15
-          #   target: macos-arm64
+          - builder: macos-15
+            target: macos-arm64
 
-          # - builder: macos-15
-          #   target: ios-arm64
+          - builder: macos-15
+            target: ios-arm64
 
+          # XXX: VCMI needs fails to link if builder is macos-15 (or if NDK is 27?)
           - builder: macos-14
             target: android-arm64
 
@@ -60,6 +61,7 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
+        # python3.11 is needed for libtorch-2.4 and lower
         python-version: '3.11'
 
     - name: Git config
