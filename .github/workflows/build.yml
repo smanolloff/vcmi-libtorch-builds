@@ -39,10 +39,10 @@ jobs:
           - builder: macos-15
             target: ios-arm64
 
-          - builder: macos-15
+          - builder: macos-14
             target: android-arm64
 
-          - builder: macos-15
+          - builder: macos-14
             target: android-x64
 
           # 32-bit android (armeabi-v7a) builds fail with assembler error
@@ -60,7 +60,7 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.13'
+        python-version: '3.11'
 
     - name: Git config
       if: startsWith(matrix.target, 'win-')
