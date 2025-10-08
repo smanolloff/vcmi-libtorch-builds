@@ -137,7 +137,7 @@ jobs:
         # echo "artifact=$art" >> $GITHUB_OUTPUT
 
         echo "artifact_root=$ARTIFACT_ROOT" >> $GITHUB_OUTPUT
-        echo "artifacT_name=vcmi-libtorch-${{matrix.target}}.zip" >> $GITHUB_OUTPUT
+        echo "artifact_name=vcmi-libtorch-${{inputs.pytorch_ref}}-${{matrix.target}}.zip" >> $GITHUB_OUTPUT
 
     - name: Upload artifact
       if: ${{ inputs.target == matrix.target || inputs.target == 'all' }}
