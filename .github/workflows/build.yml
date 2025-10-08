@@ -9,7 +9,7 @@ on:
       pytorch_ref:
         description: "pytorch ref (commit SHA or tag)"
         required: true
-        default: &default_ref "v2.6.0"
+        default: &default_ref "v2.5.1"
 
 jobs:
   build:
