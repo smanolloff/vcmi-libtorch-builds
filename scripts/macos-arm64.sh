@@ -26,7 +26,7 @@ cd pytorch
 
 # BUILD_ROOT=build_mac scripts/build_local.sh "${args[@]}"
 # cmake -P build_mac/cmake_install.cmake
-
-mkdir "$ARTIFACT_ROOT/libtorch"
-echo "test" > "$ARTIFACT_ROOT/libtorch/foo"
+find .
+mkdir libtorch
+echo "test" > libtorch/foo
 mv build_mac/libtorch "$ARTIFACT_ROOT/libtorch"
