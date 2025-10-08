@@ -40,10 +40,10 @@ jobs:
             target: ios-arm64
 
           # XXX: VCMI needs fails to link if builder is macos-15 (or if NDK is 27?)
-          - builder: macos-14
+          - builder: macos-15
             target: android-arm64
 
-          - builder: macos-14
+          - builder: macos-15
             target: android-x64
 
           # 32-bit android (armeabi-v7a) builds fail with assembler error
@@ -120,6 +120,13 @@ jobs:
             git apply -v "../$p"
           done
         done
+
+    - name: set ANDROID_NDK
+      if: contains(matrix.target, 'android')
+      run: |
+        echo ANDROID_NDK=/Users/runner/Library/Android/sdk/ndk/26.3.11579264
+        echo ANDROID_NDK_HOME=/Users/runner/Library/Android/sdk/ndk/26.3.11579264
+        echo ANDROID_NDK_ROOT=/Users/runner/Library/Android/sdk/ndk/26.3.11579264
 
     - name: Build
       id: build
