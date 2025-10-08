@@ -94,7 +94,7 @@ jobs:
       uses: actions/cache/save@v4
       with:
         path: pytorch
-        key: cache_pytorch_src-${{ env.PYTORCH_REF }}-${{ startsWith(matrix.target, "win-") && "windows" || "default" }}
+        key: cache_pytorch_src-${{ env.PYTORCH_REF }}-${{ startsWith(matrix.target, 'win-') && 'windows' || 'default' }}
 
     - name: Set PYTORCH_SHA
       run: |
