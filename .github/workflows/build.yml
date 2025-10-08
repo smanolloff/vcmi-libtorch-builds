@@ -62,7 +62,7 @@ jobs:
       uses: actions/setup-python@v5
       with:
         # python3.11 is needed for libtorch-2.4 and lower
-        python-version: '3.11'
+        python-version: '3.13'
 
     - name: Git config
       if: startsWith(matrix.target, 'win-')
