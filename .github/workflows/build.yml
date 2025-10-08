@@ -9,7 +9,7 @@ on:
       pytorch_ref:
         description: "pytorch ref (commit SHA or tag)"
         required: true
-        default: &default_ref "v2.5.1"
+        default: &default_ref "v2.5.0"
 
 jobs:
   build:
@@ -136,7 +136,7 @@ jobs:
         # echo "artifact=$art" >> $GITHUB_OUTPUT
 
         echo "artifact_root=$ARTIFACT_ROOT" >> $GITHUB_OUTPUT
-        echo "artifact_name=vcmi-libtorch-${{matrix.target}}-$PYTORCH_REF-$PYTORCH_SHA.zip" >> $GITHUB_OUTPUT
+        echo "artifact_name=vcmi-libtorch-${{matrix.target}}-$PYTORCH_REF-$PYTORCH_SHA" >> $GITHUB_OUTPUT
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
