@@ -39,7 +39,6 @@ jobs:
           - builder: macos-15
             target: ios-arm64
 
-          # XXX: VCMI needs fails to link if builder is macos-15 (or if NDK is 27?)
           - builder: macos-15
             target: android-arm64
 
@@ -121,6 +120,7 @@ jobs:
           done
         done
 
+    # XXX: VCMI builds fail unless libtorch is built with NDK 26 or lower
     - name: set ANDROID_NDK
       if: contains(matrix.target, 'android')
       run: |

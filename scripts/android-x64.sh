@@ -4,15 +4,6 @@ set -eux
 
 [ -d "$ARTIFACT_ROOT" ] || { echo "ARTIFACT_ROOT does not exist: $ARTIFACT_ROOT"; exit 1; }
 
-# https://github.com/actions/runner-images/blob/main/images/macos/macos-15-arm64-Readme.md
-# XXX: on linux this is /usr/local/lib/android/sdk/ndk/27.3.13750724
-# EXPECTED_ANDROID_NDK="/Users/runner/Library/Android/sdk/ndk/27.3.13750724"
-
-# if [ "$ANDROID_NDK" != "$EXPECTED_ANDROID_NDK" ]; then
-#   echo "Unexpected android home: have: $ANDROID_NDK, want: $EXPECTED_ANDROID_NDK" >&2
-#   exit 1
-# fi
-
 cd pytorch
 python -m venv .venv
 . .venv/bin/activate
